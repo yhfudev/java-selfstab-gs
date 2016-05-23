@@ -1,0 +1,25 @@
+DGS003
+"selfstab MWCDS" 0 0
+an "2"
+an "1"
+an "3"
+an "4"
+an "5"
+an "6"
+an "7"
+
+cn "1" label="1" m=0 d=3 s=1
+cn "2" label="2" m=1 d=9 s=0
+cn "3" label="3" m=1 d=0 s=0
+cn "4" label="4" m=0 d=7 s=1
+cn "5" label="5" m=1 d=0 s=0
+cn "6" label="6" m=1 d=4 s=1
+cn "7" label="7" m=1 d=4 s=1
+
+ae "1-2" "1" "2"
+ae "2-3" "2" "3"
+ae "2-4" "2" "4"
+ae "3-5" "3" "5"
+ae "4-6" "4" "6"
+ae "4-7" "4" "7"
+ae "6-7" "6" "7"
