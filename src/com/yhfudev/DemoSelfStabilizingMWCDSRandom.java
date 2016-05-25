@@ -53,9 +53,10 @@ public class DemoSelfStabilizingMWCDSRandom {
         */
 
         // initialize the algorithm
-        //DynamicOneToAllShortestPath algorithm1 = new DynamicOneToAllShortestPath(null);
-        SelfStabilizingMWCDSLinear algorithm = new SelfStabilizingMWCDSLinear();
-        //SelfStabilizingMWCDSRandom algorithm = new SelfStabilizingMWCDSRandom();
+        //DynamicOneToAllShortestPath algorithm = new DynamicOneToAllShortestPath(null);
+        //SelfStabilizingMWCDSLinear algorithm = new SelfStabilizingMWCDSLinear();
+        SelfStabilizingMWCDSRandom algorithm = new SelfStabilizingMWCDSRandom();
+        //SelfStabilizingDSLinear algorithm = new SelfStabilizingDSLinear();
         algorithm.init(graph);
         algorithm.setSource("0");
         //algorithm.setAnimationDelay(200);

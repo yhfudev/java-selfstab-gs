@@ -7,6 +7,7 @@ import org.graphstream.graph.Node;
 import org.graphstream.stream.SinkAdapter;
 
 /**
+ * base on the self-stabilizing algorithm in "A Linear Time Self-stabilizing Algorithm for Minimal Weakly Connected Dominating Sets"
  * Created by yhfu on 5/22/16.
  */
 public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAlgorithm {

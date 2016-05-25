@@ -54,7 +54,8 @@ public class DemoSelfStabilizingMWCDSLinear {
         FileSource source = new FileSourceDGS();
         source.addSink( graph );
         try {
-            source.begin("data/seflstab-mwcds.dgs");
+            //source.begin("data/seflstab-mwcds.dgs");
+            source.begin("data/seflstab-ds.dgs");
             while(source.nextEvents());// Thread.sleep(50);
             source.end();
         //} catch (InterruptedException e) {
@@ -64,8 +65,9 @@ public class DemoSelfStabilizingMWCDSLinear {
         }
         // initialize the algorithm
         //DynamicOneToAllShortestPath algorithm = new DynamicOneToAllShortestPath(null);
-        SelfStabilizingMWCDSLinear algorithm = new SelfStabilizingMWCDSLinear();
-        //SelfStabilizingMWCDSRandom algorithm = new SelfStabilizingMWCDSRandom();
+        //SelfStabilizingMWCDSLinear algorithm = new SelfStabilizingMWCDSLinear();
+        SelfStabilizingMWCDSRandom algorithm = new SelfStabilizingMWCDSRandom();
+        //SelfStabilizingDSLinear algorithm = new SelfStabilizingDSLinear();
         algorithm.init(graph);
         algorithm.setSource("0");
         algorithm.setAnimationDelay(2000);
