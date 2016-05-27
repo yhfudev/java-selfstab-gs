@@ -264,6 +264,15 @@ public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAl
                 m = 0;
                 node.setAttribute("m", m);
             }
+
+            // Only for debug:
+            /*s = 0;
+            node.setAttribute("s", s);
+            d = 0;
+            node.setAttribute("d", d);
+            m = 0;
+            node.setAttribute("m", m);*/
+
             node.setAttribute("ui.label", "[" + node.getId() + "] m=" + m + ",d=" + d + ",s=" + s);
             if (i == 0) {
                 // root

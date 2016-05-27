@@ -29,14 +29,14 @@ public class DemoSelfStabilizingMWCDSRandom {
         //graph.setNullAttributesAreErrors(true); // to throw an exception instead of returning null (in getAttribute()).
         graph.addAttribute("ui.quality");
         graph.addAttribute("ui.antialias");
-        graph.addAttribute("ui.stylesheet", "url(data/seflstab-mwcds.css);");
+        graph.addAttribute("ui.stylesheet", "url(data/selfstab-mwcds.css);");
         graph.display();
 
         // save the trace to file
         FileSinkDGS dgs = new FileSinkDGS();
         graph.addSink(dgs);
         try {
-            dgs.begin("seflstab-mwcds-trace.dgs");
+            dgs.begin("trace-selfstab-random.dgs");
         } catch (IOException e) {
             e.printStackTrace();
         }

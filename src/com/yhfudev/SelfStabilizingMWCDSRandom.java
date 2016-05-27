@@ -63,8 +63,8 @@ public class SelfStabilizingMWCDSRandom extends SinkAdapter implements DynamicAl
                 boolean is_enter = false;
                 boolean is_leave = false;
                 boolean is_leave_random = false;
-                boolean is_nomemb = true; // for all j in N_{<=}(i): sj=0
-                rho = Integer.MAX_VALUE;
+                boolean is_nomemb = ((s == 0)?true:false); // for all j in N_{<}(i): sj=0
+                rho = d;
                 //minMj = idx; // this node
                 // for each edge
                 for (Edge e : node.getEachEdge()) {
@@ -73,42 +73,57 @@ public class SelfStabilizingMWCDSRandom extends SinkAdapter implements DynamicAl
 
                     // calculate rho_i
                     int oppd = oppnode.getAttribute("d");
-                    rho = Math.min(oppd + 1, rho);
+                    if (oppd < Integer.MAX_VALUE) {
+                        rho = Math.min(oppd + 1, rho);
+                    }
+                    //if ((oppd != Integer.MAX_VALUE) && (d != Integer.MAX_VALUE))
+                    //if (oppd != Integer.MAX_VALUE)
                     if (oppd <= d) {
                         int opps = oppnode.getAttribute("s");
                         if (opps != 0) {
                             is_nomemb = false;
                         }
-                        if (oppd < d) {
-                            if (opps == 1) {
-                                is_leave = true;
-                            }
-                        } else {
-                            // oppd == d
-                            if (opps == 1) {
-                                is_leave_random = true;
+                        if (s == 1 && opps == 1) {
+                            if (oppd < d) {
+                                if (opps != 0) {
+                                    is_leave = true;
+                                }
+                            } else {
+                                // oppd == d
+                                // XXX: detect if one of node exit from the set by the value of s? if(s1 == s2)?
+                                if (opps != 0) {
+                                    is_leave_random = true;
+                                }
                             }
                         }
                     }
                 }
-                d = rho;
-                node.setAttribute("d_next", d);
+                if (d != rho) { // to detect if the value is changed
+                    node.setAttribute("d_next", rho);
+                }
                 // calculate enter_i
                 is_enter = is_nomemb;
                 if (is_enter) {
-                    s = 1;
-                    node.setAttribute("s_next", s);
+                    if (s != 1) { // to detect if the value is changed
+                        s = 1;
+                        node.setAttribute("s_next", s);
+                        System.out.println ("DEBUG: (" + debug_round + ") R1: " + node.getId());
+                    }
                 } else if (is_leave) {
-                    s = 0;
-                    node.setAttribute("s_next", s);
+                    if (s != 0) { // to detect if the value is changed
+                        s = 0;
+                        node.setAttribute("s_next", s);
+                        System.out.println ("DEBUG: (" + debug_round + ") R2: " + node.getId());
+                    }
                 } else if (is_leave_random) {
                     s = 1;
                     if (Math.random() > 0.5) {
                         s = 0;
                     }
+                    // randomized values are always changed item
                     node.setAttribute("s_next", s);
+                    System.out.println ("DEBUG: (" + debug_round + ") R3: " + node.getId());
                 }
-                System.out.println ("DEBUG: (" + debug_round + ") R2: " + node.getId());
             }
             // update the values
             for (i = 0; i < num; i++) {

@@ -28,14 +28,14 @@ public class DemoSelfStabilizingMWCDSLinear {
         //graph.setNullAttributesAreErrors(true); // to throw an exception instead of returning null (in getAttribute()).
         graph.addAttribute("ui.quality");
         graph.addAttribute("ui.antialias");
-        graph.addAttribute("ui.stylesheet", "url(data/seflstab-mwcds.css);");
+        graph.addAttribute("ui.stylesheet", "url(data/selfstab-mwcds.css);");
         graph.display();
 
         // save the trace to file
         FileSinkDGS dgs = new FileSinkDGS();
         graph.addSink(dgs);
         try {
-            dgs.begin("trace.dgs");
+            dgs.begin("trace-selfstab-linear.dgs");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,8 +54,9 @@ public class DemoSelfStabilizingMWCDSLinear {
         FileSource source = new FileSourceDGS();
         source.addSink( graph );
         try {
-            //source.begin("data/seflstab-mwcds.dgs");
-            source.begin("data/seflstab-ds.dgs");
+            source.begin("data/selfstab-mwcds.dgs");
+            //source.begin("data/selfstab-ds.dgs");
+            //source.begin("data/selfstab-random0.dgs");
             while(source.nextEvents());// Thread.sleep(50);
             source.end();
         //} catch (InterruptedException e) {
@@ -70,7 +71,7 @@ public class DemoSelfStabilizingMWCDSLinear {
         //SelfStabilizingDSLinear algorithm = new SelfStabilizingDSLinear();
         algorithm.init(graph);
         algorithm.setSource("0");
-        algorithm.setAnimationDelay(2000);
+        //algorithm.setAnimationDelay(4000);
 
         algorithm.compute();
 

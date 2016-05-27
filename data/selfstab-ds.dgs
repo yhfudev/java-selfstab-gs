@@ -10,9 +10,9 @@ an "7"
 an "8"
 an "9"
 
-cn "1" label="1"
+cn "1" label="1" s=1
 cn "2" label="2"
-cn "3" label="3"
+cn "3" label="3" s=1
 cn "4" label="4"
 cn "5" label="5"
 cn "6" label="6"

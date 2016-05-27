@@ -142,6 +142,9 @@ public class SelfStabilizingDSLinear extends SinkAdapter implements DynamicAlgor
                 s = node.getAttribute("s");
             } else {
                 s = 0;
+                /*if (Math.random() > 0.5) { // only for debug
+                    s = 1;
+                }*/
                 node.setAttribute("s", s);
             }
             node.setAttribute("ui.label", "[" + node.getId() + "] s=" + s);
