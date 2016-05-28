@@ -47,10 +47,6 @@ public class SelfStabilizingDSLinear extends SinkAdapter implements DynamicAlgor
             for (i = 0; i < num; i++) {
                 node = theGraph.getNode(i);
 
-                s = -1;
-                // set the temp buffer values
-                node.setAttribute("s_next", s);
-
                 s = node.getAttribute("s");
                 //int idx = Integer.parseInt(node.getAttribute("id"));
 
@@ -72,24 +68,20 @@ public class SelfStabilizingDSLinear extends SinkAdapter implements DynamicAlgor
                 }
                 if ((s == 0) && (cnt_0 >= node.getEdgeSet().size())) {
                     s = 1;
-                    node.setAttribute("s_next", s);
+                    node.setAttribute("s", s);
+                    is_changed = true;
                     System.out.println ("DEBUG: (" + debug_round + ") R1: " + node.getId());
                 } else if ((s == 1) && (cnt_1 >= node.getEdgeSet().size())) {
                     s = 0;
-                    node.setAttribute("s_next", s);
+                    node.setAttribute("s", s);
+                    is_changed = true;
                     System.out.println ("DEBUG: (" + debug_round + ") R2: " + node.getId());
                 }
             }
             // update the values
             for (i = 0; i < num; i++) {
                 node = theGraph.getNode(i);
-                s = node.getAttribute("s_next");
-                if (s >= 0) {
-                    is_changed = true; // DEBUG
-                    node.setAttribute("s", s);
-                } else {
-                    s = node.getAttribute("s");
-                }
+                s = node.getAttribute("s");
                 node.setAttribute("ui.label", "[" + node.getId() + "] s=" + s);
                 if (s == 1) {
                     node.addAttribute("ui.class", "memberinset");
