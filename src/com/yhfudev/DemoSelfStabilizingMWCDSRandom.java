@@ -22,7 +22,7 @@ public class DemoSelfStabilizingMWCDSRandom {
     }
 
     public static void main(String[] args) {
-    	int maxSteps = 12;
+    	int maxSteps = 3164;
         // create and display a graph
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
@@ -67,7 +67,7 @@ public class DemoSelfStabilizingMWCDSRandom {
         Generator generator = new FanGenerator();
         generator.addSink(graph);
         generator.begin();
-        for (int i = 0; i < maxSteps; i++) {
+        for (int i = 1; i < maxSteps; i++) {
             generator.nextEvents();
             //algorithm.compute();
         }

@@ -192,9 +192,9 @@ public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAl
                     }
                 }
             }
-            System.out.println ("DEBUG: # of s=" + count_s);
+            //System.out.println ("DEBUG: # of s=" + count_s);
         }
-        System.out.println ("DEBUG: END compute");
+        System.out.println ("DEBUG: END compute. # of (nodes,steps,|S|)=(" + theGraph.getNodeCount() + "," + (debug_round-1) + "," + count_s + ")" );
     }
 
     public void nodeAdded(String sourceId, long timeId, String nodeId) {

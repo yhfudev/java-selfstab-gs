@@ -32,6 +32,7 @@ public class SelfStabilizingDSLinear extends SinkAdapter implements DynamicAlgor
         int s = 0;
         int i;
 
+        int count_s = 0;
         int debug_round = 0; // debug
 
         System.out.println ("DEBUG: START compute");
@@ -43,11 +44,15 @@ public class SelfStabilizingDSLinear extends SinkAdapter implements DynamicAlgor
             System.out.println ("DEBUG: +++++++ round: " + debug_round + " SelfStabilizingDSLinear");
 
             // calculate the next state
+            count_s = 0;
             is_changed = false;
             for (i = 0; i < num; i++) {
                 node = theGraph.getNode(i);
 
                 s = node.getAttribute("s");
+                if (s != 0) {
+                    count_s ++;
+                }
                 //int idx = Integer.parseInt(node.getAttribute("id"));
 
                 int cnt_1 = 0;
@@ -90,7 +95,7 @@ public class SelfStabilizingDSLinear extends SinkAdapter implements DynamicAlgor
                 }
             }
         }
-        System.out.println ("DEBUG: END compute");
+        System.out.println ("DEBUG: END compute. # of (nodes,steps,|S|)=(" + theGraph.getNodeCount() + "," + (debug_round-1) + "," + count_s + ")" );
     }
 
     public void nodeAdded(String sourceId, long timeId, String nodeId) {
