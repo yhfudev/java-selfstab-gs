@@ -36,6 +36,7 @@ public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAl
         int minMj;
         int i;
         int j;
+        int count_s = 0;
 
         int debug_round = 0; // debug
 
@@ -48,6 +49,7 @@ public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAl
             System.out.println ("DEBUG: +++++++ round: " + debug_round + " SelfStabilizingMWCDSLinear");
 
             // calculate the next state
+            count_s = 0;
             is_changed = false;
             for (i = 0; i < num; i++) {
                 node = theGraph.getNode(i);
@@ -63,7 +65,10 @@ public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAl
                 s = node.getAttribute("s");
                 d = node.getAttribute("d");
                 m = node.getAttribute("m");
-                int idx = Integer.parseInt(node.getAttribute("id"));
+                if (s != 0) {
+                    count_s ++;
+                }
+                int idx = Integer.parseInt((String) node.getAttribute("id"));
                 if (i == 0) {
                     // root
                     if ((d != 0) || (m != 0) || (s != 1)) {
@@ -78,7 +83,7 @@ public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAl
                         node.setAttribute("d_next", d);
                         node.setAttribute("m_next", m);
 
-                        System.out.println ("DEBUG: (" + debug_round + ") R0: " + node.getId());
+                        System.out.println ("DEBUG: (" + debug_round + ") R0: [" + node.getId() + "] m=" + m + ",d=" + d + ",s=" + s);
                     }
                     continue;
                 }
@@ -87,7 +92,11 @@ public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAl
                 boolean is_leave = false;
                 boolean is_nomemb = true; // for all j in N_{<=}(i): sj=0
                 rho = Integer.MAX_VALUE;
-                minMj = idx; // this node
+                if (m == 1) {
+                	minMj = idx; // this node
+                } else {
+                	minMj = Integer.MAX_VALUE;
+                }
                 // for each edge
                 for (Edge e : node.getEachEdge()) {
                     //System.out.printf("node %d neighbor %s via %s%n", i, e.getOpposite(node).getId(), e.getId() );
@@ -104,9 +113,9 @@ public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAl
                     }
 
                     // calculate minM_i
-                    int oppm = node.getAttribute("m");
+                    int oppm = oppnode.getAttribute("m");
                     if ((oppd == d) && (oppm == 1)) {
-                        j = Integer.parseInt(oppnode.getAttribute("id"));
+                        j = Integer.parseInt((String) oppnode.getAttribute("id"));
                         minMj = Math.min(j, minMj);
                     }
                 }
@@ -127,7 +136,7 @@ public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAl
                     m = chk;
                     node.setAttribute("d_next", d);
                     node.setAttribute("m_next", m);
-                    System.out.println ("DEBUG: (" + debug_round + ") R1: " + node.getId());
+                    System.out.println ("DEBUG: (" + debug_round + ") R1: [" + node.getId() + "] m=" + m + ",d=" + d);
                 } else if ((d == rho) && (chk == 1) && (minMj == idx)) {
                     // R2
                     m = 0;
@@ -140,7 +149,7 @@ public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAl
                     }
                     node.setAttribute("s_next", s);
                     node.setAttribute("m_next", m);
-                    System.out.println ("DEBUG: (" + debug_round + ") R2: " + node.getId());
+                    System.out.println ("DEBUG: (" + debug_round + ") R2: [" + node.getId() + "] m=" + m + ",s=" + s);
                 }
             }
             // update the values
@@ -183,6 +192,7 @@ public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAl
                     }
                 }
             }
+            System.out.println ("DEBUG: # of s=" + count_s);
         }
         System.out.println ("DEBUG: END compute");
     }

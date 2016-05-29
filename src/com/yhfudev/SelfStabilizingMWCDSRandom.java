@@ -33,7 +33,7 @@ public class SelfStabilizingMWCDSRandom extends SinkAdapter implements DynamicAl
         int rho = 0;
         //int minMj;
         int i;
-        int j;
+        int count_s = 0;
 
         int debug_round = 0; // debug
 
@@ -46,6 +46,7 @@ public class SelfStabilizingMWCDSRandom extends SinkAdapter implements DynamicAl
             System.out.println ("DEBUG: +++++++ round: " + debug_round + " SelfStabilizingMWCDSRandom");
 
             // calculate the next state
+            count_s = 0;
             is_changed = false;
             for (i = 0; i < num; i++) {
                 node = theGraph.getNode(i);
@@ -58,6 +59,9 @@ public class SelfStabilizingMWCDSRandom extends SinkAdapter implements DynamicAl
 
                 s = node.getAttribute("s");
                 d = node.getAttribute("d");
+                if (s != 0) {
+                    count_s ++;
+                }
                 //int idx = Integer.parseInt(node.getAttribute("id"));
 
                 boolean is_enter = false;
@@ -107,13 +111,13 @@ public class SelfStabilizingMWCDSRandom extends SinkAdapter implements DynamicAl
                     if (s != 1) { // to detect if the value is changed
                         s = 1;
                         node.setAttribute("s_next", s);
-                        System.out.println ("DEBUG: (" + debug_round + ") R1: " + node.getId());
+                        System.out.println ("DEBUG: (" + debug_round + ") R1: [" + node.getId() + "] s=" + s);
                     }
                 } else if (is_leave) {
                     if (s != 0) { // to detect if the value is changed
                         s = 0;
                         node.setAttribute("s_next", s);
-                        System.out.println ("DEBUG: (" + debug_round + ") R2: " + node.getId());
+                        System.out.println ("DEBUG: (" + debug_round + ") R2: [" + node.getId() + "] s=" + s);
                     }
                 } else if (is_leave_random) {
                     s = 1;
@@ -122,7 +126,7 @@ public class SelfStabilizingMWCDSRandom extends SinkAdapter implements DynamicAl
                     }
                     // randomized values are always changed item
                     node.setAttribute("s_next", s);
-                    System.out.println ("DEBUG: (" + debug_round + ") R3: " + node.getId());
+                    System.out.println ("DEBUG: (" + debug_round + ") R3: [" + node.getId() + "] s=" + s);
                 }
             }
             // update the values
@@ -158,6 +162,7 @@ public class SelfStabilizingMWCDSRandom extends SinkAdapter implements DynamicAl
                     }
                 }
             }
+            System.out.println ("DEBUG: # of s=" + count_s);
         }
         System.out.println ("DEBUG: END compute");
     }

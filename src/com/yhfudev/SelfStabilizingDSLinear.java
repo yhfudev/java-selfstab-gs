@@ -70,12 +70,12 @@ public class SelfStabilizingDSLinear extends SinkAdapter implements DynamicAlgor
                     s = 1;
                     node.setAttribute("s", s);
                     is_changed = true;
-                    System.out.println ("DEBUG: (" + debug_round + ") R1: " + node.getId());
+                    System.out.println ("DEBUG: (" + debug_round + ") R1: [" + node.getId() + "] s=" + s);
                 } else if ((s == 1) && (cnt_1 >= node.getEdgeSet().size())) {
                     s = 0;
                     node.setAttribute("s", s);
                     is_changed = true;
-                    System.out.println ("DEBUG: (" + debug_round + ") R2: " + node.getId());
+                    System.out.println ("DEBUG: (" + debug_round + ") R2: [" + node.getId() + "] s=" + s);
                 }
             }
             // update the values

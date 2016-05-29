@@ -22,6 +22,7 @@ public class DemoSelfStabilizingMWCDSRandom {
     }
 
     public static void main(String[] args) {
+    	int maxSteps = 12;
         // create and display a graph
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
@@ -62,21 +63,24 @@ public class DemoSelfStabilizingMWCDSRandom {
         //algorithm.setAnimationDelay(200);
 
         // add some nodes and edges
-        Generator generator = new DorogovtsevMendesGenerator();
+        //Generator generator = new DorogovtsevMendesGenerator();
+        Generator generator = new FanGenerator();
         generator.addSink(graph);
         generator.begin();
-        for (int i = 3; i <= 200; i++) {
+        for (int i = 0; i < maxSteps; i++) {
             generator.nextEvents();
-            algorithm.compute();
+            //algorithm.compute();
         }
+        algorithm.compute();
 
         pause(2000);
 
-		/*RandomWalk algorithm = new RandomWalk();
-		algorithm.init(graph);*/
+		//RandomWalk algorithm = new RandomWalk();
+		//algorithm.init(graph);
 
+        /*
         // now remove some nodes and edges
-        for (int i = 200; i > 100; i--) {
+        for (int i = maxSteps-1; i > 100; i--) {
             graph.removeNode(i);
             algorithm.compute();
         }
@@ -87,6 +91,13 @@ public class DemoSelfStabilizingMWCDSRandom {
         for (int i = 1; i <= 10; i++) {
             algorithm.setSource(i + "");
             algorithm.compute();
+        }*/
+
+        GraphVerificator verificator = new MWCDSGraphVerificator();
+        if (verificator.verify(graph)) {
+        	System.out.println ("DEBUG: PASS MWCDSGraphVerificator verficiation.");
+        } else {
+        	System.out.println ("DEBUG: FAILED MWCDSGraphVerificator verficiation!");
         }
 
         algorithm.terminate();

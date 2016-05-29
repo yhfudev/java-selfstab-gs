@@ -54,9 +54,11 @@ public class DemoSelfStabilizingMWCDSLinear {
         FileSource source = new FileSourceDGS();
         source.addSink( graph );
         try {
-            source.begin("data/selfstab-mwcds.dgs");
+            //source.begin("data/selfstab-mwcds.dgs");
             //source.begin("data/selfstab-ds.dgs");
             //source.begin("data/selfstab-random0.dgs");
+            //source.begin("data/selfstab-random1.dgs");
+            source.begin("data/selfstab-fan.dgs");
             while(source.nextEvents());// Thread.sleep(50);
             source.end();
         //} catch (InterruptedException e) {
@@ -73,7 +75,15 @@ public class DemoSelfStabilizingMWCDSLinear {
         algorithm.setSource("0");
         //algorithm.setAnimationDelay(4000);
 
+        delay();
         algorithm.compute();
+
+        GraphVerificator verificator = new MWCDSGraphVerificator();
+        if (verificator.verify(graph)) {
+        	System.out.println ("DEBUG: PASS MWCDSGraphVerificator verficiation.");
+        } else {
+        	System.out.println ("DEBUG: FAILED MWCDSGraphVerificator verficiation!");
+        }
 
         algorithm.terminate();
         graph.removeSink(dgs);
@@ -81,6 +91,13 @@ public class DemoSelfStabilizingMWCDSLinear {
             dgs.end();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void delay() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
         }
     }
 }
