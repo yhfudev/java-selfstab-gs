@@ -20,7 +20,14 @@ public class DemoSelfStabilizingMWCDSRandom {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
+        // command line lib: apache CLI http://commons.apache.org/proper/commons-cli/
+        // graph file .dgs generator
+        // -- output file name
+        // -- graph type: fan, random, ...
+        // -- argument for generator
+
         int i;
     	int maxSteps = 3164; // 12,34,102,318,1002,3164,10002
         // create and display a graph

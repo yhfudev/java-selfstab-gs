@@ -1,16 +1,14 @@
 package com.yhfudev;
 
-import org.graphstream.algorithm.DynamicAlgorithm;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
-import org.graphstream.stream.SinkAdapter;
 
 /**
  * base on the self-stabilizing algorithm in "A Linear Time Self-stabilizing Algorithm for Minimal Weakly Connected Dominating Sets"
  * Created by yhfu on 5/22/16.
  */
-public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAlgorithm {
+public class SelfStabilizingMWCDSLinear extends SinkAlgorithm {
     protected Graph theGraph;
 
     @Override
@@ -220,6 +218,13 @@ public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAl
             //System.out.println ("DEBUG: # of s=" + count_s);
         }
 
+        result.nodes = theGraph.getNodeCount();
+        result.steps = (debug_round-1);
+        result.dominating_set_size = count_s;
+        result.d_max = d_max;
+        result.node_degree_min = count_degree_min;
+        result.node_degree_max = count_degree_max;
+        result.node_degree_avg = count_degree_avg;
         System.out.println ("DEBUG: END compute. # of (nodes,steps,|S|,d_max,dgre_min,dgre_max,dgre_avg)=("
                 + theGraph.getNodeCount()
                 + "," + (debug_round-1)
@@ -337,28 +342,4 @@ public class SelfStabilizingMWCDSLinear extends SinkAdapter implements DynamicAl
     }
     protected int lastId = 0;
 
-    protected String sourceId;
-    public String getSource() {
-        return this.sourceId;
-    }
-    public void setSource(String sourceId) {
-        this.sourceId = sourceId;
-    }
-
-    /**
-     * If this delay is positive, sleeps at the end of each pivot and updates UI
-     * classes
-     */
-    protected long animationDelay = 0;
-    public void setAnimationDelay(long millis) {
-        animationDelay = millis;
-    }
-    protected void processAnimationDelay() {
-        if (animationDelay > 0) {
-            try {
-                Thread.sleep(animationDelay);
-            } catch (InterruptedException e) {
-            }
-        }
-    }
 }

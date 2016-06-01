@@ -10,7 +10,7 @@ import org.graphstream.stream.SinkAdapter;
  * base on the self-stabilizing algorithm in "Self-stabilizing Algorithms for Minimal Dominating Sets and Maximal Independent Sets"
  * Created by yhfu on 5/22/16.
  */
-public class SelfStabilizingDSLinear extends SinkAdapter implements DynamicAlgorithm {
+public class SelfStabilizingDSLinear extends SinkAlgorithm {
     protected Graph theGraph;
 
     @Override
@@ -33,6 +33,10 @@ public class SelfStabilizingDSLinear extends SinkAdapter implements DynamicAlgor
         int i;
 
         int count_s = 0;
+        int count_degree_min = 0;
+        int count_degree_max = 0;
+        int count_degree_avg = 0;
+        int d_max = 0;
         int debug_round = 0; // debug
 
         System.out.println ("DEBUG: START compute");
@@ -45,14 +49,33 @@ public class SelfStabilizingDSLinear extends SinkAdapter implements DynamicAlgor
 
             // calculate the next state
             count_s = 0;
+            count_degree_min = 0;
+            count_degree_max = 0;
+            count_degree_avg = 0;
+            d_max = 0;
             is_changed = false;
             for (i = 0; i < num; i++) {
                 node = theGraph.getNode(i);
+                s = node.getDegree();
+                if (i == 0) {
+                    count_degree_max = s;
+                    count_degree_min = s;
+                }
+                if (count_degree_max < s) {
+                    count_degree_max = s;
+                }
+                if (count_degree_min > s) {
+                    count_degree_min = s;
+                }
+                count_degree_avg += s;
 
                 s = node.getAttribute("s");
                 if (s != 0) {
                     count_s ++;
                 }
+                //if (d_max < d) {
+                //    d_max = d;
+                //}
                 //int idx = Integer.parseInt(node.getAttribute("id"));
 
                 int cnt_1 = 0;
@@ -83,6 +106,8 @@ public class SelfStabilizingDSLinear extends SinkAdapter implements DynamicAlgor
                     System.out.println ("DEBUG: (" + debug_round + ") R2: [" + node.getId() + "] s=" + s);
                 }
             }
+            //System.out.println ("DEBUG: total degree=" + count_degree_avg + ", num=" + num + ", avg=" + (count_degree_avg / num));
+            count_degree_avg /= num;
             // update the values
             for (i = 0; i < num; i++) {
                 node = theGraph.getNode(i);
@@ -95,7 +120,23 @@ public class SelfStabilizingDSLinear extends SinkAdapter implements DynamicAlgor
                 }
             }
         }
-        System.out.println ("DEBUG: END compute. # of (nodes,steps,|S|)=(" + theGraph.getNodeCount() + "," + (debug_round-1) + "," + count_s + ")" );
+        //System.out.println ("DEBUG: END compute. # of (nodes,steps,|S|)=(" + theGraph.getNodeCount() + "," + (debug_round-1) + "," + count_s + ")" );
+        result.nodes = theGraph.getNodeCount();
+        result.steps = (debug_round-1);
+        result.dominating_set_size = count_s;
+        result.d_max = d_max;
+        result.node_degree_min = count_degree_min;
+        result.node_degree_max = count_degree_max;
+        result.node_degree_avg = count_degree_avg;
+        System.out.println ("DEBUG: END compute. # of (nodes,steps,|S|,d_max,dgre_min,dgre_max,dgre_avg)=("
+                + theGraph.getNodeCount()
+                + "," + (debug_round-1)
+                + "," + count_s
+                + "," + d_max
+                + "," + count_degree_min
+                + "," + count_degree_max
+                + "," + count_degree_avg
+                + ")" );
     }
 
     public void nodeAdded(String sourceId, long timeId, String nodeId) {
@@ -154,29 +195,4 @@ public class SelfStabilizingDSLinear extends SinkAdapter implements DynamicAlgor
         lastId = i;
     }
     protected int lastId = 0;
-
-    protected String sourceId;
-    public String getSource() {
-        return this.sourceId;
-    }
-    public void setSource(String sourceId) {
-        this.sourceId = sourceId;
-    }
-
-    /**
-     * If this delay is positive, sleeps at the end of each pivot and updates UI
-     * classes
-     */
-    protected long animationDelay = 0;
-    public void setAnimationDelay(long millis) {
-        animationDelay = millis;
-    }
-    protected void processAnimationDelay() {
-        if (animationDelay > 0) {
-            try {
-                Thread.sleep(animationDelay);
-            } catch (InterruptedException e) {
-            }
-        }
-    }
 }
