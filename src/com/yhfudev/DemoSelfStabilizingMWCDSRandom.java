@@ -1,7 +1,6 @@
 package com.yhfudev;
 
-import org.graphstream.algorithm.generator.DorogovtsevMendesGenerator;
-import org.graphstream.algorithm.generator.Generator;
+import org.graphstream.algorithm.generator.*;
 import org.graphstream.algorithm.networksimplex.DynamicOneToAllShortestPath;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -22,7 +21,8 @@ public class DemoSelfStabilizingMWCDSRandom {
     }
 
     public static void main(String[] args) {
-    	int maxSteps = 3164;
+        int i;
+    	int maxSteps = 3164; // 12,34,102,318,1002,3164,10002
         // create and display a graph
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
@@ -31,7 +31,7 @@ public class DemoSelfStabilizingMWCDSRandom {
         graph.addAttribute("ui.quality");
         graph.addAttribute("ui.antialias");
         graph.addAttribute("ui.stylesheet", "url(data/selfstab-mwcds.css);");
-        graph.display();
+        //graph.display();
 
         // save the trace to file
         FileSinkDGS dgs = new FileSinkDGS();
@@ -63,22 +63,74 @@ public class DemoSelfStabilizingMWCDSRandom {
         //algorithm.setAnimationDelay(200);
 
         // add some nodes and edges
-        //Generator generator = new DorogovtsevMendesGenerator();
-        Generator generator = new FanGenerator();
+        Generator generator = null;
+        //generator = new ChvatalGenerator(); // fix size
+        //generator = new FullGenerator(); // full connected, 2 steps,1 node in dominate set
+        //generator = new GridGenerator(); // only one result
+        //generator = new HypercubeGenerator(); // one result
+        //generator = new IncompleteGridGenerator(); // error
+        //generator = new PetersenGraphGenerator(); // fix size
+        //generator = new PointsOfInterestGenerator(); // error
+        //generator = new RandomEuclideanGenerator(); // linear algo endless loop
+        //generator = new RandomFixedDegreeDynamicGraphGenerator(); //
+        //generator = new RandomGenerator(); //
+        //generator = new URLGenerator("http://www.cnbeta.com"); //
+        //generator = new WikipediaGenerator("Antarctica"); // no end
+
+        //generator = new DorogovtsevMendesGenerator(); // ok
+        //generator = new FlowerSnarkGenerator(); // ok
+        //generator = new WattsStrogatzGenerator(maxSteps, 30, 0.5); // small world, ok
+        //generator = new LobsterGenerator(); // tree like, ok
+
+        //generator = new FanGenerator();
+        int listf5[][] = {
+                {12, 5},
+                {34, 5},
+                {102, 5},
+                {318, 5},
+                {1002, 5},
+                {3164, 5},
+                {10002, 5},
+        };
+        int listp3[][] = {
+                {12, 2},
+                {34, 2},
+                {102, 3},
+                {318, 9},
+                {1002, 30},
+                {3164, 90},
+                {10002, 300},
+        };
+        int listp10[][] = {
+                {12, 2},
+                {34, 3},
+                {102, 10},
+                {318, 32},
+                {1002, 100},
+                {3164, 316},
+                {10002, 1000},
+        };
+        i = 6;
+        maxSteps = listf5[i][0];
+        int degree = listf5[i][1];
+        generator = new ConnectionGenerator(graph, degree, false, true);
+
         generator.addSink(graph);
         generator.begin();
-        for (int i = 1; i < maxSteps; i++) {
+        for (i = 1; i < maxSteps; i++) {
             generator.nextEvents();
             //algorithm.compute();
         }
+        generator.end();
+        delay();
         algorithm.compute();
 
+        /*
         pause(2000);
 
 		//RandomWalk algorithm = new RandomWalk();
 		//algorithm.init(graph);
 
-        /*
         // now remove some nodes and edges
         for (int i = maxSteps-1; i > 100; i--) {
             graph.removeNode(i);
@@ -107,6 +159,12 @@ public class DemoSelfStabilizingMWCDSRandom {
             dgs.end();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    private static void delay() {
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
         }
     }
 }

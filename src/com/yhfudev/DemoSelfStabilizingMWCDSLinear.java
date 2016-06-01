@@ -1,5 +1,6 @@
 package com.yhfudev;
 
+import org.graphstream.graph.EdgeRejectedException;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.stream.file.FileSinkDGS;
@@ -53,23 +54,37 @@ public class DemoSelfStabilizingMWCDSLinear {
 
         FileSource source = new FileSourceDGS();
         source.addSink( graph );
+        int count_edge_error = 0;
         try {
-            //source.begin("data/selfstab-mwcds.dgs");
-            //source.begin("data/selfstab-ds.dgs");
-            //source.begin("data/selfstab-random0.dgs");
-            //source.begin("data/selfstab-random1.dgs");
-            source.begin("data/selfstab-fan.dgs");
-            while(source.nextEvents());// Thread.sleep(50);
+            //source.begin("data/selfstab-mwcds.dgs"); // Ding's paper example
+            //source.begin("data/selfstab-ds.dgs");    // DS example
+            //source.begin("data/selfstab-doro-1002.dgs"); // DorogovtsevMendes
+            //source.begin("data/selfstab-rand-p10-10002.dgs"); // random connected graph with degree = 10% nodes
+            source.begin("data/selfstab-rand-f5-34.dgs"); // random connected graph with degree = 5
+            while(true) {
+                try {
+                    if (false == source.nextEvents()) {
+                        break;
+                    }
+                } catch (EdgeRejectedException e) {
+                    // ignore
+                    count_edge_error ++;
+                    System.out.println("DEBUG: adding edge error: " + e.toString());
+                }
+                // Thread.sleep(50);
+            }
             source.end();
         //} catch (InterruptedException e) {
         //    e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println ("DEBUG: END read from source. # of edges ignored=" + count_edge_error);
+
         // initialize the algorithm
         //DynamicOneToAllShortestPath algorithm = new DynamicOneToAllShortestPath(null);
-        //SelfStabilizingMWCDSLinear algorithm = new SelfStabilizingMWCDSLinear();
-        SelfStabilizingMWCDSRandom algorithm = new SelfStabilizingMWCDSRandom();
+        SelfStabilizingMWCDSLinear algorithm = new SelfStabilizingMWCDSLinear();
+        //SelfStabilizingMWCDSRandom algorithm = new SelfStabilizingMWCDSRandom();
         //SelfStabilizingDSLinear algorithm = new SelfStabilizingDSLinear();
         algorithm.init(graph);
         algorithm.setSource("0");
@@ -96,7 +111,7 @@ public class DemoSelfStabilizingMWCDSLinear {
 
     private static void delay() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
         }
     }
