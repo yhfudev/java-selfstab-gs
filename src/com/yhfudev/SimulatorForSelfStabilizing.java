@@ -12,9 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Created by yhfu on 5/22/16.
+ * Simulator For Self-Stabilizing
  */
-public class DemoSelfStabilizingMWCDSLinear {
+public class SimulatorForSelfStabilizing {
 
     public static void pause(long millis) {
         try {
@@ -25,7 +25,7 @@ public class DemoSelfStabilizingMWCDSLinear {
     private static void showHelp (Options opt)
     {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp( "sim <options>", opt );
+        formatter.printHelp( "simss <options>", opt );
     }
 
     public static void main(String[] args)
