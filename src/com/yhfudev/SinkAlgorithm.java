@@ -1,9 +1,6 @@
 package com.yhfudev;
 
 import org.graphstream.algorithm.DynamicAlgorithm;
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
 import org.graphstream.stream.SinkAdapter;
 
 /**
@@ -24,6 +21,12 @@ public abstract class SinkAlgorithm extends SinkAdapter implements DynamicAlgori
         this.sourceId = sourceId;
     }
 
+    /**
+     * if use heuristic strategic
+     */
+    protected boolean is_heuristic_on = false;
+    public boolean isHeuristicOn () { return this.is_heuristic_on;}
+    public void heuristicOn (boolean on) { this.is_heuristic_on = on;}
     /**
      * If this delay is positive, sleeps at the end of each pivot and updates UI
      * classes

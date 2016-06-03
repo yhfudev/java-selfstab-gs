@@ -86,6 +86,10 @@ public class SelfStabilizingMWCDSRandom extends SinkAlgorithm {
                 }
                 //int idx = Integer.parseInt(node.getAttribute("id"));
 
+                boolean has_maximum_degree_adj = false; // detect if there exist a adjacent node which degree > than tha of any adjacent node.
+                int maxadj_degree = 0; // the maximum degree value of the adjacent node
+                String maxadj_id = "";     // the id of the adjacent node with maximum degree
+                boolean is_maximal_degree = true; // detect if the current node's degree is > than that of any adjacent nodes.
                 boolean is_enter = false;
                 boolean is_leave = false;
                 boolean is_leave_random = false;
@@ -96,6 +100,17 @@ public class SelfStabilizingMWCDSRandom extends SinkAlgorithm {
                 for (Edge e : node.getEachEdge()) {
                     //System.out.printf("node %d neighbor %s via %s%n", i, e.getOpposite(node).getId(), e.getId() );
                     Node oppnode = e.getOpposite(node);
+                    if (isHeuristicOn()) {
+                        int dgr = node.getDegree();
+                        int dgr_adj = oppnode.getDegree();
+                        if (node.getDegree() <= oppnode.getDegree()) {
+                            is_maximal_degree = false;
+                            if ((node.getDegree() < oppnode.getDegree()) && (maxadj_degree < oppnode.getDegree())) {
+                                maxadj_degree = oppnode.getDegree();
+                                maxadj_id = oppnode.getId();
+                            }
+                        }
+                    }
 
                     // calculate rho_i
                     int oppd = oppnode.getAttribute("d");
@@ -129,6 +144,15 @@ public class SelfStabilizingMWCDSRandom extends SinkAlgorithm {
                 }
                 // calculate enter_i
                 is_enter = is_nomemb;
+
+                if (isHeuristicOn()) {
+                    // note the adjacent maximum node
+                    if (maxadj_degree > 0) {
+                        Node oppnode = theGraph.getNode(maxadj_id);
+                        oppnode.setAttribute("h", 1);
+                    }
+                }
+
                 if (is_enter) {
                     if (s != 1) { // to detect if the value is changed
                         s = 1;
@@ -143,9 +167,29 @@ public class SelfStabilizingMWCDSRandom extends SinkAlgorithm {
                     }
                 } else if (is_leave_random) {
                     s = 1;
-                    if (Math.random() > 0.5) {
-                        s = 0;
+                    if (isHeuristicOn()) {
+                        is_maximal_degree = false;
+                        if (node.hasAttribute("h")) {
+                            int h = node.getAttribute("h");
+                            if (h != 0) {
+                                is_maximal_degree = true;
+                            }
+                        }
+                        if (is_maximal_degree) {
+                            if (Math.random() < 0.2) {
+                                s = 0;
+                            }
+                        } else {
+                            if (Math.random() < 0.8) {
+                                s = 0;
+                            }
+                        }
+                    } else {
+                        if (Math.random() < 0.5) {
+                            s = 0;
+                        }
                     }
+
                     // randomized values are always changed item
                     node.setAttribute("s_next", s);
                     System.out.println ("DEBUG: (" + debug_round + ") R3: [" + node.getId() + "] s=" + s);
@@ -179,6 +223,15 @@ public class SelfStabilizingMWCDSRandom extends SinkAlgorithm {
                         node.addAttribute("ui.class", "root");
                     }
                 } else {
+                    int h = 0;
+                    if (isHeuristicOn()) {
+                        if (node.hasAttribute("h")) {
+                            h = node.getAttribute("h");
+                        }
+                    }
+                    if (h == 1) {
+                        node.addAttribute("ui.class", "maximaldegree");
+                    } else
                     if (s == 1) {
                         node.addAttribute("ui.class", "memberinset");
                     } else {
@@ -233,6 +286,15 @@ public class SelfStabilizingMWCDSRandom extends SinkAlgorithm {
         }
         node.setAttribute("ui.label", "[" + node.getId() + "] d=" + d + ",s=" + s);
         node.addAttribute("id", lastId + ""); lastId ++;
+        int h = 0;
+        if (isHeuristicOn()) {
+            if (node.hasAttribute("h")) {
+                h = node.getAttribute("h");
+            }
+        }
+        if (h == 1) {
+            node.addAttribute("ui.class", "maximaldegree");
+        } else
         if (s == 1) {
             node.addAttribute("ui.class", "memberinset");
         } else {
@@ -288,6 +350,15 @@ public class SelfStabilizingMWCDSRandom extends SinkAlgorithm {
                     node.addAttribute("ui.class", "root");
                 }
             } else {
+                int h = 0;
+                if (isHeuristicOn()) {
+                    if (node.hasAttribute("h")) {
+                        h = node.getAttribute("h");
+                    }
+                }
+                if (h == 1) {
+                    node.addAttribute("ui.class", "maximaldegree");
+                } else
                 if (s == 1) {
                     node.addAttribute("ui.class", "memberinset");
                 } else {
