@@ -42,9 +42,10 @@ public class ConnectionGenerator extends BaseGenerator {
     }
 
     protected void addNode() {
-        sendNodeAdded(sourceId, Integer.toString(currentIndex));
-        if (currentIndex == 0) {
-            currentIndex++;
+        int thisIndex = currentIndex;
+        currentIndex ++;
+        sendNodeAdded(sourceId, Integer.toString(thisIndex));
+        if (thisIndex == 0) {
             return;
         }
         // connect to a randomly selected node
@@ -61,7 +62,7 @@ public class ConnectionGenerator extends BaseGenerator {
             randomNum = this.random.nextInt(numNodes);
             if (tryTimes > numNodes * 2) {
                 if (i >= numNodes) {
-                    System.out.println ("DEBUG: Can't connect the node " + currentIndex + " to graph sz=" + numNodes);
+                    System.out.println ("DEBUG: Can't connect the node " + thisIndex + " to graph sz=" + numNodes);
                     return;
                 }
                 randomNum = (startRand + i) % numNodes;
@@ -71,9 +72,9 @@ public class ConnectionGenerator extends BaseGenerator {
             if (node.getDegree() >= degree) {
                 continue;
             }
-            if (! node.getId().equals(Integer.toString(currentIndex))) {
-                edgeId = "" + Integer.toString(currentIndex) + "-" + node.getId();
-                sendEdgeAdded(sourceId, edgeId, Integer.toString(currentIndex), node.getId(), false);
+            if (! node.getId().equals(Integer.toString(thisIndex))) {
+                edgeId = "" + Integer.toString(thisIndex) + "-" + node.getId();
+                sendEdgeAdded(sourceId, edgeId, Integer.toString(thisIndex), node.getId(), false);
                 break;
             }
         }
@@ -87,20 +88,19 @@ public class ConnectionGenerator extends BaseGenerator {
                     // check the degrees of part of nodes and connect to them
                     if (node.getDegree() < degree) {
                         // check if the edge exist
-                        edgeId = "" + Integer.toString(currentIndex) + "-" + node.getId();
+                        edgeId = "" + Integer.toString(thisIndex) + "-" + node.getId();
                         Edge edge = theGraph.getEdge(edgeId);
                         if (null == edge) {
                             // check if the id is self
-                            if ((node.getId().equals(Integer.toString(currentIndex))) && (!connectToSelf)) {
+                            if ((node.getId().equals(Integer.toString(thisIndex))) && (!connectToSelf)) {
                                 break;
                             }
-                            sendEdgeAdded(sourceId, edgeId, Integer.toString(currentIndex), node.getId(), false);
+                            sendEdgeAdded(sourceId, edgeId, Integer.toString(thisIndex), node.getId(), false);
                         }
                     }
                 }
             }
         }
-        currentIndex++;
     }
 
     protected void connectAllNodes() {

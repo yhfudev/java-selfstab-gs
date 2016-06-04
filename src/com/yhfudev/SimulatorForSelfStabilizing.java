@@ -92,8 +92,8 @@ public class SimulatorForSelfStabilizing {
             sFileName = cmd.getOptionValue("i");
         }
         String genname = null;
-        if(cmd.hasOption("a")) {
-            genname = cmd.getOptionValue("a");
+        if(cmd.hasOption("g")) {
+            genname = cmd.getOptionValue("g");
         }
         if ((null == genname) && (null == sFileName)) {
             System.out.println ("Error: not specify the input file or graph generator");
