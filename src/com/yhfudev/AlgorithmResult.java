@@ -1,3 +1,8 @@
+/**
+ * Copyright 2016 Yunhui Fu <yhfudev@gmail.com>
+ * License: GPL v3.0 or later
+ */
+
 package com.yhfudev;
 
 import java.io.IOException;

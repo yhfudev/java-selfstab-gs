@@ -11,6 +11,13 @@ Features
   * Supports randomized self-stabilizing algorithm for minimal weakly connected dominating sets
   * GUI interface to show the graph and interact with it
 
+License
+-------
+
+Copyright 2016 Yunhui Fu <yhfudev@gmail.com>
+License: GPL v3.0 or later
+
+
 Usage
 -----
 Assume you create .jar file in sub-folder out.
