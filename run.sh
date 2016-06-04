@@ -140,8 +140,7 @@ EOF
 
 ################################################################################
 if [ 0 = 1 ]; then
-# generate data
-
+# generating data
 
 # Dorogovtsev-Mendes
 java -jar ${EXEC_SIMSS} -g doro -n    12 -l ${DN_DATA}/selfstab-doro-12-raw.dgs -o results.csv
