@@ -36,12 +36,11 @@ For example, in Eclipse, you can export the project from the menu "File" -- "Exp
 * Generate the graph and store it to a file
 
     java -jar simss.jar -g rand -n 10002 -d 5 -l selfstab-rand-m5-10002-raw.dgs -o results.csv
-    # and strip the file
     cat selfstab-rand-m5-10002-raw.dgs | grep -v "cn " > selfstab-rand-m5-10002.dgs
 
 It will call the class ConnectionGenerator to generate a connected graph of size 10002 nodes,
 and the degree of each node is up to 5;
-The graph is stored in file selfstab-rand-m5-10002-raw.dgs, which is striped and save to selfstab-rand-m5-10002.dgs;
+The graph is stored in file selfstab-rand-m5-10002-raw.dgs, which is striped and save to selfstab-rand-m5-10002.dgs (the second line);
 A 
 self-stabilizing algorithm for minimal weakly connected dominating sets
 is run on the graph and the results is verified to make sure everything is correct.
