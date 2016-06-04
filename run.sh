@@ -14,10 +14,12 @@ function generate_gnuplot_ding ()
     shift
 
     cat << EOF > ${PARAM_PREFIX}.gp
+# The default size for postscript output is 10 inches x 7 inches.
+# The default for eps output is 5 x 3.5 inches
 #set terminal pdf color solid lw 1 size 5.83,4.13 font "cmr12" enh
 #set pointsize 1
 #set output "${PARAM_PREFIX}-steps.pdf"
-set terminal postscript eps color enhanced
+set terminal postscript eps color enhanced size 2.57,1.8
 set output "${PARAM_PREFIX}-steps.eps"
 
 
@@ -37,7 +39,7 @@ replot
 
 
 
-set terminal postscript eps color enhanced
+set terminal postscript eps color enhanced size 2.57,1.8
 set output "${PARAM_PREFIX}-dset.eps"
 
 
@@ -70,7 +72,7 @@ function generate_gnuplot_rand ()
 #set terminal pdf color solid lw 1 size 5.83,4.13 font "cmr12" enh
 #set pointsize 1
 #set output "${PARAM_PREFIX}-steps.pdf"
-set terminal postscript eps color enhanced
+set terminal postscript eps color enhanced size 2.57,1.8
 set output "${PARAM_PREFIX}-steps.eps"
 
 
@@ -101,7 +103,7 @@ replot
 
 
 
-set terminal postscript eps color enhanced
+set terminal postscript eps color enhanced size 2.57,1.8
 set output "${PARAM_PREFIX}-dset.eps"
 
 
@@ -312,12 +314,12 @@ if [ 1 = 1 ]; then
         # cat test.dgs | grep -v "cn " > ${FN_DATA}
 
         # Ding's linear algorithm
-        java -jar ${EXEC_SIMSS} -a ding -i data/${FN_DATA} -o ${LIST_GRAPH[$i]}-ding.dat
+        java -jar ${EXEC_SIMSS} -a ding -i ${DN_DATA}/${FN_DATA} -o ${LIST_GRAPH[$i]}-ding.dat
 
         # randomized algorithm
         C=0
         while (( $C < 12 )); do
-            java -jar ${EXEC_SIMSS} -a rand -i data/${FN_DATA} -o ${LIST_GRAPH[$i]}-rand.dat
+            java -jar ${EXEC_SIMSS} -a rand -i ${DN_DATA}/${FN_DATA} -o ${LIST_GRAPH[$i]}-rand.dat
             C=$(($C + 1))
         done
 fi
@@ -326,7 +328,7 @@ if [ 1 = 1 ]; then
         # randomized algorithm with heuristic mode on
         C=0
         while (( $C < 12 )); do
-            java -jar ${EXEC_SIMSS} -a rand -i data/${FN_DATA} -o ${LIST_GRAPH[$i]}-rand-heuristic.dat -u
+            java -jar ${EXEC_SIMSS} -a rand -i ${DN_DATA}/${FN_DATA} -o ${LIST_GRAPH[$i]}-rand-heuristic.dat -u
             C=$(($C + 1))
         done
 fi
@@ -470,9 +472,25 @@ cat << EOF > "${FN_TEX}"
 \begin{document}
 
 \maketitle
+
+
+\section{Introduction}
+There are ${#LIST_GRAPH[*]} types of graph to be tested in this section.
+\begin{enumerate}
 EOF
 
+i=0
+while (( $i < ${#LIST_GRAPH[*]} )) ; do
+    cat << EOF >> "${FN_TEX}"
+  \item ${LIST_GRAPH_DESC[$i]};
+EOF
+    i=$((i+1))
+done
 
+cat << EOF >> "${FN_TEX}"
+\end{enumerate}
+
+EOF
 
 i=0
 while (( $i < ${#LIST_GRAPH[*]} )) ; do
@@ -493,7 +511,7 @@ while (( $i < ${#LIST_GRAPH[*]} )) ; do
     FN_SUM_RAND_HEU="tmp-${LIST_GRAPH[$i]}-rand-heusum.dat"
 
     # generate result summary table
-    randsummary "${FN_RAND}" > "${FN_SUM_RAND}"
+    randsummary "${FN_RAND}"     > "${FN_SUM_RAND}"
     randsummary "${FN_RAND_HEU}" > "${FN_SUM_RAND_HEU}"
 
     #while IFS= read -r -u3 a && IFS= read -r -u4 b; do
@@ -537,30 +555,40 @@ while (( $i < ${#LIST_GRAPH[*]} )) ; do
 
     # put the results to latex source file
     cat << EOF >> "${FN_TEX}"
+\section{${LIST_GRAPH_DESC[$i]}}
+
 \begin{figure}[h!t] \centering
 	\vspace{-10pt}
 	\subfloat[{The run steps by \algoding~ algorithm.} \label{fig:fanstepsding}]{
-		\includegraphics[width=0.41\textwidth]{${LIST_GRAPH[$i]}-ding-steps.eps}
+		\includegraphics[width=0.31\textwidth]{${LIST_GRAPH[$i]}-ding-steps.eps}
 	}
 	~%add desired spacing between images, e. g. ~, \quad, \qquad etc.
 	%(or a blank line to force the subfigure onto a new line)
 	%\hspace{-2mm}
 	\subfloat[{The run steps by \algorand~ algorithm.}\label{fig:fanstepsrand}]{
-		\includegraphics[width=0.41\textwidth]{${LIST_GRAPH[$i]}-rand-steps.eps}
+		\includegraphics[width=0.31\textwidth]{${LIST_GRAPH[$i]}-rand-steps.eps}
+	}
+	~
+	\subfloat[{The run steps by \algorand~ heuristic algorithm.}\label{fig:fanstepsrand}]{
+		\includegraphics[width=0.31\textwidth]{${LIST_GRAPH[$i]}-rand-heuristic-steps.eps}
 	}
 	\\\\%add desired spacing between images, e. g. ~, \quad, \qquad etc.
 	%(or a blank line to force the subfigure onto a new line)
 	%\vspace{-4pt}
 	\subfloat[{The dominating set size of the graph by \algoding~ algorithm.}\label{fig:fandsetding}]{
-		\includegraphics[width=0.41\textwidth]{${LIST_GRAPH[$i]}-ding-dset.eps}
+		\includegraphics[width=0.31\textwidth]{${LIST_GRAPH[$i]}-ding-dset.eps}
 	}
 	~%add desired spacing between images, e. g. ~, \quad, \qquad etc.
 	%(or a blank line to force the subfigure onto a new line)
 	%\hspace{-2mm}
 	\subfloat[{The dominating set size of the graph by \algorand~ algorithm.}\label{fig:fandsetrand}]{
-		\includegraphics[width=0.41\textwidth]{${LIST_GRAPH[$i]}-rand-dset.eps}
+		\includegraphics[width=0.31\textwidth]{${LIST_GRAPH[$i]}-rand-dset.eps}
 	}
-%    \\%add desired spacing between images, e. g. ~, \quad, \qquad etc.
+	~
+	\subfloat[{The dominating set size of the graph by \algorand~ heuristic algorithm.}\label{fig:fandsetrand}]{
+		\includegraphics[width=0.31\textwidth]{${LIST_GRAPH[$i]}-rand-heuristic-dset.eps}
+	}
+%    \\\\%add desired spacing between images, e. g. ~, \quad, \qquad etc.
 %      %(or a blank line to force the subfigure onto a new line)
 %    \vspace{-7pt}
 %    \subfloat[Trace 3-5 (Android WiFi)\label{fig:trace3-5}]{
@@ -577,6 +605,7 @@ while (( $i < ${#LIST_GRAPH[*]} )) ; do
 	\input{${FN_TABLE}}
 \end{table}
 
+\clearpage
 EOF
 
     i=$((i+1))
