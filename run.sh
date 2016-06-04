@@ -142,42 +142,44 @@ EOF
 if [ 0 = 1 ]; then
 # generating data
 
-# Dorogovtsev-Mendes
-java -jar ${EXEC_SIMSS} -g doro -n    12 -l ${DN_DATA}/selfstab-doro-12-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g doro -n    34 -l ${DN_DATA}/selfstab-doro-34-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g doro -n   102 -l ${DN_DATA}/selfstab-doro-102-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g doro -n   318 -l ${DN_DATA}/selfstab-doro-318-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g doro -n  1002 -l ${DN_DATA}/selfstab-doro-1002-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g doro -n  3164 -l ${DN_DATA}/selfstab-doro-3164-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g doro -n 10002 -l ${DN_DATA}/selfstab-doro-10002-raw.dgs -o results.csv
-cat ${DN_DATA}/selfstab-doro-12-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-doro-12.dgs
-cat ${DN_DATA}/selfstab-doro-34-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-doro-34.dgs
-cat ${DN_DATA}/selfstab-doro-102-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-doro-102.dgs
-cat ${DN_DATA}/selfstab-doro-318-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-doro-318.dgs
-cat ${DN_DATA}/selfstab-doro-1002-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-doro-1002.dgs
-cat ${DN_DATA}/selfstab-doro-3164-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-doro-3164.dgs
-cat ${DN_DATA}/selfstab-doro-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-doro-10002.dgs
+if [ 1 = 1 ]; then
+    # Dorogovtsev-Mendes
+    java -jar ${EXEC_SIMSS} -g doro -n    12 -l ${DN_DATA}/selfstab-doro-12-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g doro -n    34 -l ${DN_DATA}/selfstab-doro-34-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g doro -n   102 -l ${DN_DATA}/selfstab-doro-102-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g doro -n   318 -l ${DN_DATA}/selfstab-doro-318-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g doro -n  1002 -l ${DN_DATA}/selfstab-doro-1002-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g doro -n  3164 -l ${DN_DATA}/selfstab-doro-3164-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g doro -n 10002 -l ${DN_DATA}/selfstab-doro-10002-raw.dgs -o results.csv
+    cat ${DN_DATA}/selfstab-doro-12-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-doro-12.dgs
+    cat ${DN_DATA}/selfstab-doro-34-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-doro-34.dgs
+    cat ${DN_DATA}/selfstab-doro-102-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-doro-102.dgs
+    cat ${DN_DATA}/selfstab-doro-318-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-doro-318.dgs
+    cat ${DN_DATA}/selfstab-doro-1002-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-doro-1002.dgs
+    cat ${DN_DATA}/selfstab-doro-3164-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-doro-3164.dgs
+    cat ${DN_DATA}/selfstab-doro-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-doro-10002.dgs
 
-# fan 1 layer
-java -jar ${EXEC_SIMSS} -g fan -n    12 -l ${DN_DATA}/selfstab-fan1l-12-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g fan -n    34 -l ${DN_DATA}/selfstab-fan1l-34-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g fan -n   102 -l ${DN_DATA}/selfstab-fan1l-102-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g fan -n   318 -l ${DN_DATA}/selfstab-fan1l-318-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g fan -n  1002 -l ${DN_DATA}/selfstab-fan1l-1002-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g fan -n  3164 -l ${DN_DATA}/selfstab-fan1l-3164-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g fan -n 10002 -l ${DN_DATA}/selfstab-fan1l-10002-raw.dgs -o results.csv
-cat ${DN_DATA}/selfstab-fan1l-12-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-12.dgs
-cat ${DN_DATA}/selfstab-fan1l-34-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-34.dgs
-cat ${DN_DATA}/selfstab-fan1l-102-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-102.dgs
-cat ${DN_DATA}/selfstab-fan1l-318-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-318.dgs
-cat ${DN_DATA}/selfstab-fan1l-1002-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-1002.dgs
-cat ${DN_DATA}/selfstab-fan1l-3164-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-3164.dgs
-cat ${DN_DATA}/selfstab-fan1l-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-10002.dgs
+    # fan 1 layer
+    java -jar ${EXEC_SIMSS} -g fan -n    12 -l ${DN_DATA}/selfstab-fan1l-12-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g fan -n    34 -l ${DN_DATA}/selfstab-fan1l-34-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g fan -n   102 -l ${DN_DATA}/selfstab-fan1l-102-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g fan -n   318 -l ${DN_DATA}/selfstab-fan1l-318-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g fan -n  1002 -l ${DN_DATA}/selfstab-fan1l-1002-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g fan -n  3164 -l ${DN_DATA}/selfstab-fan1l-3164-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g fan -n 10002 -l ${DN_DATA}/selfstab-fan1l-10002-raw.dgs -o results.csv
+    cat ${DN_DATA}/selfstab-fan1l-12-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-12.dgs
+    cat ${DN_DATA}/selfstab-fan1l-34-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-34.dgs
+    cat ${DN_DATA}/selfstab-fan1l-102-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-102.dgs
+    cat ${DN_DATA}/selfstab-fan1l-318-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-318.dgs
+    cat ${DN_DATA}/selfstab-fan1l-1002-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-1002.dgs
+    cat ${DN_DATA}/selfstab-fan1l-3164-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-3164.dgs
+    cat ${DN_DATA}/selfstab-fan1l-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-fan1l-10002.dgs
+fi
 
 # We have to run the generator for rand-f5, rand-fp3, rand-fp10 multiple time,
 # since these types of graphs are hard to get for all of nodes get a fix degree.
 # And we also need to verify all of the generated .dgs files to make sure all of nodes have the same degree.
-if [ 0 = 1 ]; then
+if [ 1 = 1 ]; then
     java -jar ${EXEC_SIMSS} -g rand -f -n    12 -d 5 -l ${DN_DATA}/selfstab-rand-f5-12-raw.dgs -o results.csv
     java -jar ${EXEC_SIMSS} -g rand -f -n    34 -d 5 -l ${DN_DATA}/selfstab-rand-f5-34-raw.dgs -o results.csv
     java -jar ${EXEC_SIMSS} -g rand -f -n   102 -d 5 -l ${DN_DATA}/selfstab-rand-f5-102-raw.dgs -o results.csv
@@ -222,56 +224,111 @@ if [ 0 = 1 ]; then
     cat ${DN_DATA}/selfstab-rand-fp10-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-rand-fp10-10002.dgs
 fi
 
-# rand-m5
-java -jar ${EXEC_SIMSS} -g rand -n    12 -d 5 -l ${DN_DATA}/selfstab-rand-m5-12-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n    34 -d 5 -l ${DN_DATA}/selfstab-rand-m5-34-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n   102 -d 5 -l ${DN_DATA}/selfstab-rand-m5-102-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n   318 -d 5 -l ${DN_DATA}/selfstab-rand-m5-318-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n  1002 -d 5 -l ${DN_DATA}/selfstab-rand-m5-1002-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n  3164 -d 5 -l ${DN_DATA}/selfstab-rand-m5-3164-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n 10002 -d 5 -l ${DN_DATA}/selfstab-rand-m5-10002-raw.dgs -o results.csv
-cat ${DN_DATA}/selfstab-rand-m5-12-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-12.dgs
-cat ${DN_DATA}/selfstab-rand-m5-34-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-34.dgs
-cat ${DN_DATA}/selfstab-rand-m5-102-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-102.dgs
-cat ${DN_DATA}/selfstab-rand-m5-318-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-318.dgs
-cat ${DN_DATA}/selfstab-rand-m5-1002-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-1002.dgs
-cat ${DN_DATA}/selfstab-rand-m5-3164-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-3164.dgs
-cat ${DN_DATA}/selfstab-rand-m5-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-10002.dgs
+if [ 1 = 1 ]; then
+    # rand-m5
+    java -jar ${EXEC_SIMSS} -g rand -n    12 -d 5 -l ${DN_DATA}/selfstab-rand-m5-12-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n    34 -d 5 -l ${DN_DATA}/selfstab-rand-m5-34-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n   102 -d 5 -l ${DN_DATA}/selfstab-rand-m5-102-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n   318 -d 5 -l ${DN_DATA}/selfstab-rand-m5-318-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n  1002 -d 5 -l ${DN_DATA}/selfstab-rand-m5-1002-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n  3164 -d 5 -l ${DN_DATA}/selfstab-rand-m5-3164-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n 10002 -d 5 -l ${DN_DATA}/selfstab-rand-m5-10002-raw.dgs -o results.csv
+    cat ${DN_DATA}/selfstab-rand-m5-12-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-12.dgs
+    cat ${DN_DATA}/selfstab-rand-m5-34-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-34.dgs
+    cat ${DN_DATA}/selfstab-rand-m5-102-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-102.dgs
+    cat ${DN_DATA}/selfstab-rand-m5-318-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-318.dgs
+    cat ${DN_DATA}/selfstab-rand-m5-1002-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-1002.dgs
+    cat ${DN_DATA}/selfstab-rand-m5-3164-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-3164.dgs
+    cat ${DN_DATA}/selfstab-rand-m5-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-rand-m5-10002.dgs
 
-# rand-mp3
-java -jar ${EXEC_SIMSS} -g rand -n    12 -d   2 -l ${DN_DATA}/selfstab-rand-mp3-12-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n    34 -d   2 -l ${DN_DATA}/selfstab-rand-mp3-34-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n   102 -d   3 -l ${DN_DATA}/selfstab-rand-mp3-102-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n   318 -d   9 -l ${DN_DATA}/selfstab-rand-mp3-318-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n  1002 -d  30 -l ${DN_DATA}/selfstab-rand-mp3-1002-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n  3164 -d  90 -l ${DN_DATA}/selfstab-rand-mp3-3164-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n 10002 -d 300 -l ${DN_DATA}/selfstab-rand-mp3-10002-raw.dgs -o results.csv
-cat ${DN_DATA}/selfstab-rand-mp3-12-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-12.dgs
-cat ${DN_DATA}/selfstab-rand-mp3-34-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-34.dgs
-cat ${DN_DATA}/selfstab-rand-mp3-102-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-102.dgs
-cat ${DN_DATA}/selfstab-rand-mp3-318-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-318.dgs
-cat ${DN_DATA}/selfstab-rand-mp3-1002-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-1002.dgs
-cat ${DN_DATA}/selfstab-rand-mp3-3164-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-3164.dgs
-cat ${DN_DATA}/selfstab-rand-mp3-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-10002.dgs
+    # rand-mp3
+    java -jar ${EXEC_SIMSS} -g rand -n    12 -d   2 -l ${DN_DATA}/selfstab-rand-mp3-12-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n    34 -d   2 -l ${DN_DATA}/selfstab-rand-mp3-34-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n   102 -d   3 -l ${DN_DATA}/selfstab-rand-mp3-102-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n   318 -d   9 -l ${DN_DATA}/selfstab-rand-mp3-318-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n  1002 -d  30 -l ${DN_DATA}/selfstab-rand-mp3-1002-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n  3164 -d  90 -l ${DN_DATA}/selfstab-rand-mp3-3164-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n 10002 -d 300 -l ${DN_DATA}/selfstab-rand-mp3-10002-raw.dgs -o results.csv
+    cat ${DN_DATA}/selfstab-rand-mp3-12-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-12.dgs
+    cat ${DN_DATA}/selfstab-rand-mp3-34-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-34.dgs
+    cat ${DN_DATA}/selfstab-rand-mp3-102-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-102.dgs
+    cat ${DN_DATA}/selfstab-rand-mp3-318-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-318.dgs
+    cat ${DN_DATA}/selfstab-rand-mp3-1002-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-1002.dgs
+    cat ${DN_DATA}/selfstab-rand-mp3-3164-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-3164.dgs
+    cat ${DN_DATA}/selfstab-rand-mp3-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp3-10002.dgs
 
-# rand-mp10
-java -jar ${EXEC_SIMSS} -g rand -n    12 -d    2 -l ${DN_DATA}/selfstab-rand-mp10-12-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n    34 -d    3 -l ${DN_DATA}/selfstab-rand-mp10-34-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n   102 -d   10 -l ${DN_DATA}/selfstab-rand-mp10-102-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n   318 -d   32 -l ${DN_DATA}/selfstab-rand-mp10-318-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n  1002 -d  100 -l ${DN_DATA}/selfstab-rand-mp10-1002-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n  3164 -d  316 -l ${DN_DATA}/selfstab-rand-mp10-3164-raw.dgs -o results.csv
-java -jar ${EXEC_SIMSS} -g rand -n 10002 -d 1000 -l ${DN_DATA}/selfstab-rand-mp10-10002-raw.dgs -o results.csv
-cat ${DN_DATA}/selfstab-rand-mp10-12-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-12.dgs
-cat ${DN_DATA}/selfstab-rand-mp10-34-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-34.dgs
-cat ${DN_DATA}/selfstab-rand-mp10-102-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-102.dgs
-cat ${DN_DATA}/selfstab-rand-mp10-318-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-318.dgs
-cat ${DN_DATA}/selfstab-rand-mp10-1002-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-1002.dgs
-cat ${DN_DATA}/selfstab-rand-mp10-3164-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-3164.dgs
-cat ${DN_DATA}/selfstab-rand-mp10-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-10002.dgs
+    # rand-mp10
+    java -jar ${EXEC_SIMSS} -g rand -n    12 -d    2 -l ${DN_DATA}/selfstab-rand-mp10-12-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n    34 -d    3 -l ${DN_DATA}/selfstab-rand-mp10-34-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n   102 -d   10 -l ${DN_DATA}/selfstab-rand-mp10-102-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n   318 -d   32 -l ${DN_DATA}/selfstab-rand-mp10-318-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n  1002 -d  100 -l ${DN_DATA}/selfstab-rand-mp10-1002-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n  3164 -d  316 -l ${DN_DATA}/selfstab-rand-mp10-3164-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g rand -n 10002 -d 1000 -l ${DN_DATA}/selfstab-rand-mp10-10002-raw.dgs -o results.csv
+    cat ${DN_DATA}/selfstab-rand-mp10-12-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-12.dgs
+    cat ${DN_DATA}/selfstab-rand-mp10-34-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-34.dgs
+    cat ${DN_DATA}/selfstab-rand-mp10-102-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-102.dgs
+    cat ${DN_DATA}/selfstab-rand-mp10-318-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-318.dgs
+    cat ${DN_DATA}/selfstab-rand-mp10-1002-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-1002.dgs
+    cat ${DN_DATA}/selfstab-rand-mp10-3164-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-3164.dgs
+    cat ${DN_DATA}/selfstab-rand-mp10-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-rand-mp10-10002.dgs
+fi
+
+if [ 1 = 1 ]; then
+    # lobster
+    java -jar ${EXEC_SIMSS} -g lobster -n    12 -d    2 -l ${DN_DATA}/selfstab-lobster-12-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g lobster -n    34 -d    3 -l ${DN_DATA}/selfstab-lobster-34-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g lobster -n   102 -d   10 -l ${DN_DATA}/selfstab-lobster-102-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g lobster -n   318 -d   32 -l ${DN_DATA}/selfstab-lobster-318-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g lobster -n  1002 -d  100 -l ${DN_DATA}/selfstab-lobster-1002-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g lobster -n  3164 -d  316 -l ${DN_DATA}/selfstab-lobster-3164-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g lobster -n 10002 -d 1000 -l ${DN_DATA}/selfstab-lobster-10002-raw.dgs -o results.csv
+    cat ${DN_DATA}/selfstab-lobster-12-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-lobster-12.dgs
+    cat ${DN_DATA}/selfstab-lobster-34-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-lobster-34.dgs
+    cat ${DN_DATA}/selfstab-lobster-102-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-lobster-102.dgs
+    cat ${DN_DATA}/selfstab-lobster-318-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-lobster-318.dgs
+    cat ${DN_DATA}/selfstab-lobster-1002-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-lobster-1002.dgs
+    cat ${DN_DATA}/selfstab-lobster-3164-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-lobster-3164.dgs
+    cat ${DN_DATA}/selfstab-lobster-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-lobster-10002.dgs
+
+    # watt
+    java -jar ${EXEC_SIMSS} -g watt -n    12 -d    2 -l ${DN_DATA}/selfstab-watt-12-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g watt -n    34 -d    3 -l ${DN_DATA}/selfstab-watt-34-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g watt -n   102 -d   10 -l ${DN_DATA}/selfstab-watt-102-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g watt -n   318 -d   32 -l ${DN_DATA}/selfstab-watt-318-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g watt -n  1002 -d  100 -l ${DN_DATA}/selfstab-watt-1002-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g watt -n  3164 -d  316 -l ${DN_DATA}/selfstab-watt-3164-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g watt -n 10002 -d 1000 -l ${DN_DATA}/selfstab-watt-10002-raw.dgs -o results.csv
+    cat ${DN_DATA}/selfstab-watt-12-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-watt-12.dgs
+    cat ${DN_DATA}/selfstab-watt-34-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-watt-34.dgs
+    cat ${DN_DATA}/selfstab-watt-102-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-watt-102.dgs
+    cat ${DN_DATA}/selfstab-watt-318-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-watt-318.dgs
+    cat ${DN_DATA}/selfstab-watt-1002-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-watt-1002.dgs
+    cat ${DN_DATA}/selfstab-watt-3164-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-watt-3164.dgs
+    cat ${DN_DATA}/selfstab-watt-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-watt-10002.dgs
+
+    # Flower
+    java -jar ${EXEC_SIMSS} -g flower -n    1 -l ${DN_DATA}/selfstab-flower-12-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g flower -n    6 -l ${DN_DATA}/selfstab-flower-34-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g flower -n   24 -l ${DN_DATA}/selfstab-flower-102-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g flower -n   77 -l ${DN_DATA}/selfstab-flower-318-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g flower -n  248 -l ${DN_DATA}/selfstab-flower-1002-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g flower -n  789 -l ${DN_DATA}/selfstab-flower-3164-raw.dgs -o results.csv
+    java -jar ${EXEC_SIMSS} -g flower -n 2499 -l ${DN_DATA}/selfstab-flower-10002-raw.dgs -o results.csv
+    cat ${DN_DATA}/selfstab-flower-12-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-flower-12.dgs
+    cat ${DN_DATA}/selfstab-flower-34-raw.dgs    | grep -v "cn " > ${DN_DATA}/selfstab-flower-34.dgs
+    cat ${DN_DATA}/selfstab-flower-102-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-flower-102.dgs
+    cat ${DN_DATA}/selfstab-flower-318-raw.dgs   | grep -v "cn " > ${DN_DATA}/selfstab-flower-318.dgs
+    cat ${DN_DATA}/selfstab-flower-1002-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-flower-1002.dgs
+    cat ${DN_DATA}/selfstab-flower-3164-raw.dgs  | grep -v "cn " > ${DN_DATA}/selfstab-flower-3164.dgs
+    cat ${DN_DATA}/selfstab-flower-10002-raw.dgs | grep -v "cn " > ${DN_DATA}/selfstab-flower-10002.dgs
+fi
+
 
 rm ${DN_DATA}/*-raw.dgs
+exit 0
 fi
+
 
 ################################################################################
 # config arrays for simulation and data processing
@@ -279,8 +336,8 @@ fi
 #LIST_NODES=( 12 34 102 318 1002 3164 )
 LIST_NODES=( 12 34 102 318 1002 3164 10002 )
 
-#LIST_GRAPH=( rand-f5 rand-fp3 rand-fp10 rand-m5 rand-mp3 rand-mp10 doro fan1l fan2l )
-LIST_GRAPH=( rand-f5 rand-fp3 rand-fp10 rand-m5 rand-mp3 rand-mp10 doro fan1l )
+#LIST_GRAPH=( rand-f5 rand-fp3 rand-fp10 rand-m5 rand-mp3 rand-mp10 lobster watt flower doro fan1l fan2l )
+LIST_GRAPH=( rand-f5 rand-fp3 rand-fp10 rand-m5 rand-mp3 rand-mp10 lobster watt flower doro fan1l )
 
 LIST_GRAPH_DESC=(
     "rand-f5   -- Randomized graph with fixed degree 5"
@@ -289,6 +346,9 @@ LIST_GRAPH_DESC=(
     "rand-m5   -- Randomized graph with max degree 5"
     "rand-mp3  -- Randomized graph with max degree value of 3\% nodes"
     "rand-mp10 -- Randomized graph with max degree value of 10\% nodes"
+    "lobster   -- lobster graph"
+    "watt      -- watt graph"
+    "flower    -- flower graph"
     "doro      -- Dorogovtsev Mendes graph"
     "fan1l     -- 1 layer fan grpah"
     "fan2l     -- 2 layers fan grpah"
