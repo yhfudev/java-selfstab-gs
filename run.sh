@@ -285,8 +285,8 @@ LIST_GRAPH=( rand-f5 rand-fp3 rand-fp10 rand-m5 rand-mp3 rand-mp10 doro fan1l )
 
 LIST_GRAPH_DESC=(
     "rand-f5   -- Randomized graph with fixed degree 5"
-    "rand-fp3  -- Randomized graph with degree value of 3\% nodes"
-    "rand-fp10 -- Randomized graph with degree value of 10\% nodes"
+    "rand-fp3  -- Randomized graph with fixed degree value of 3\% nodes"
+    "rand-fp10 -- Randomized graph with fixed degree value of 10\% nodes"
     "rand-m5   -- Randomized graph with max degree 5"
     "rand-mp3  -- Randomized graph with max degree value of 3\% nodes"
     "rand-mp10 -- Randomized graph with max degree value of 10\% nodes"
@@ -557,6 +557,12 @@ while (( $i < ${#LIST_GRAPH[*]} )) ; do
     cat << EOF >> "${FN_TEX}"
 \section{${LIST_GRAPH_DESC[$i]}}
 
+% the data
+\begin{table}[h!t] \caption{The convergence steps and the size of dominating set by the \algoding~ and the \algorand~ algorithm on a ${LIST_GRAPH_DESC[$i]}.} \label{tab:compalgorandf5}
+	\input{${FN_TABLE}}
+\end{table}
+
+
 \begin{figure}[h!t] \centering
 	\vspace{-10pt}
 	\subfloat[{The run steps by \algoding~ algorithm.} \label{fig:fanstepsding}]{
@@ -600,11 +606,6 @@ while (( $i < ${#LIST_GRAPH[*]} )) ; do
 \end{figure}
 
 
-% the data
-\begin{table}[h!t] \caption{The convergence steps and the size of dominating set by the \algoding~ and the \algorand~ algorithm on a ${LIST_GRAPH_DESC[$i]}.} \label{tab:compalgorandf5}
-	\input{${FN_TABLE}}
-\end{table}
-
 \clearpage
 EOF
 
@@ -616,3 +617,5 @@ cat << EOF >> "${FN_TEX}"
 
 \end{document}
 EOF
+
+xelatex all; xelatex all
