@@ -52,7 +52,7 @@ public class SimulatorForSelfStabilizing {
         options.addOption("l", true, "the trace log file name");
         options.addOption("a", true, "the algorithm name, ding or rand");
         // options specified to generator
-        options.addOption("g", true, "the graph generator algorithm name: fan, rand, doro, flower, watt, lobster");
+        options.addOption("g", true, "the graph generator algorithm name: fan1l, fan2l, rand, doro, flower, watt, lobster");
         options.addOption("n", true, "the number of nodes");
         options.addOption("d", true, "the node degree (max)");
         options.addOption("f", false, "if the degree value is fix or not");
@@ -197,7 +197,7 @@ public class SimulatorForSelfStabilizing {
             if(cmd.hasOption("n")) {
                 n = Integer.parseInt(cmd.getOptionValue("n"));
             }
-            int d=5; // the degree of nodes
+            int d=3; // the degree of nodes
             if(cmd.hasOption("d")) {
                 d = Integer.parseInt(cmd.getOptionValue("d"));
             }
@@ -208,8 +208,10 @@ public class SimulatorForSelfStabilizing {
             if ("".equals(genname)) {
                 System.out.println ("Error: not set generator name");
                 return;
-            } else if ("fan".equals(genname)) {
+            } else if ("fan1l".equals(genname)) {
                 generator = new FanGenerator();
+            } else if ("fan2l".equals(genname)) {
+                generator = new Fan2lGenerator (graph, d);
             } else if ("doro".equals(genname)) {
                 generator = new DorogovtsevMendesGenerator();
             } else if ("flower".equals(genname)) {
@@ -227,6 +229,12 @@ public class SimulatorForSelfStabilizing {
                 int k;
                 double beta = 0.5;
                 k = (n / 20) * 2;
+                if (k < 2) {
+                    k = 2;
+                }
+                if (n < 2 * 6) {
+                    n = 2 * 6;
+                }
                 generator = new WattsStrogatzGenerator(n, k, beta);
             }
         /*int listf5[][] = {
@@ -267,55 +275,56 @@ public class SimulatorForSelfStabilizing {
                 generator.nextEvents();
             }
             generator.end();
+            delay(500);
         }
 
-        String algo = "rand";
         if(cmd.hasOption("a")) {
+            SinkAlgorithm algorithm = null;
+            String algo = "rand";
             algo = cmd.getOptionValue("a");
-        }
-        SinkAlgorithm algorithm = null;
-        if ("ding".equals(algo)) {
-            algorithm = new SelfStabilizingMWCDSLinear();
-        } else if ("ds".equals(algo)) {
-            algorithm = new SelfStabilizingDSLinear();
-        } else {
-            algorithm = new SelfStabilizingMWCDSRandom();
-        }
-        algorithm.init(graph);
-        algorithm.setSource("0");
-        if (delay_time > 0) {
-            algorithm.setAnimationDelay(delay_time);
-        }
-        if(cmd.hasOption("u")) {
-            algorithm.heuristicOn(true);
-        } else {
-            algorithm.heuristicOn(false);
-        }
-        algorithm.compute();
+            if ("ding".equals(algo)) {
+                algorithm = new SelfStabilizingMWCDSLinear();
+            } else if ("ds".equals(algo)) {
+                algorithm = new SelfStabilizingDSLinear();
+            } else {
+                algorithm = new SelfStabilizingMWCDSRandom();
+            }
+            algorithm.init(graph);
+            algorithm.setSource("0");
+            if (delay_time > 0) {
+                algorithm.setAnimationDelay(delay_time);
+            }
+            if (cmd.hasOption("u")) {
+                algorithm.heuristicOn(true);
+            } else {
+                algorithm.heuristicOn(false);
+            }
+            algorithm.compute();
 
-        GraphVerificator verificator = new MWCDSGraphVerificator();
-        if (verificator.verify(graph)) {
-            System.out.println ("DEBUG: PASS MWCDSGraphVerificator verficiation.");
-        } else {
-            System.out.println ("DEBUG: FAILED MWCDSGraphVerificator verficiation!");
-        }
+            GraphVerificator verificator = new MWCDSGraphVerificator();
+            if (verificator.verify(graph)) {
+                System.out.println("DEBUG: PASS MWCDSGraphVerificator verficiation.");
+            } else {
+                System.out.println("DEBUG: FAILED MWCDSGraphVerificator verficiation!");
+            }
 
-        if (null != writer) {
-            AlgorithmResult result = algorithm.getResult();
-            result.SaveTo(writer);
-            try {
-				writer.flush();
-	            writer.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            if (null != writer) {
+                AlgorithmResult result = algorithm.getResult();
+                result.SaveTo(writer);
+                try {
+                    writer.flush();
+                    writer.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            algorithm.terminate();
         }
 
         if (null != generator) {
             generator.removeSink(graph);
         }
-        algorithm.terminate();
         if (dgs != null) {
             graph.removeSink(dgs);
             try {

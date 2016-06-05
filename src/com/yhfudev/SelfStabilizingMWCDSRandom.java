@@ -151,7 +151,7 @@ public class SelfStabilizingMWCDSRandom extends SinkAlgorithm {
 
                 if (isHeuristicOn()) {
                     // note the adjacent maximum node
-                    if (maxadj_degree > 0) {
+                	if (maxadj_degree > 0) { //if (maxadj_degree > node.getDegree() * 2) {
                         Node oppnode = theGraph.getNode(maxadj_id);
                         oppnode.setAttribute("h", 1);
                     }
@@ -179,12 +179,13 @@ public class SelfStabilizingMWCDSRandom extends SinkAlgorithm {
                                 is_maximal_degree = true;
                             }
                         }
+                        double prob_leave = 0.2;
                         if (is_maximal_degree) {
-                            if (Math.random() < 0.2) {
+                            if (Math.random() < prob_leave) {
                                 s = 0;
                             }
                         } else {
-                            if (Math.random() < 0.8) {
+                            if (Math.random() < (1 - prob_leave)) {
                                 s = 0;
                             }
                         }

@@ -8,7 +8,7 @@ import org.graphstream.algorithm.generator.Generator;
 import org.graphstream.stream.SourceBase;
 
 /**
- * Created by yhfu on 5/27/16.
+ * 1 layer fan graph
  */
 public class FanGenerator extends SourceBase implements Generator
 {
