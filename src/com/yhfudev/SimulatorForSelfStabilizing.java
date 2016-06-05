@@ -6,8 +6,10 @@ package com.yhfudev;
 
 import org.apache.commons.cli.*;
 import org.graphstream.algorithm.generator.*;
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.EdgeRejectedException;
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.stream.file.FileSinkDGS;
 import org.graphstream.stream.file.FileSource;
@@ -15,6 +17,7 @@ import org.graphstream.stream.file.FileSourceDGS;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 /**
  * Simulator For Self-Stabilizing
@@ -32,6 +35,20 @@ public class SimulatorForSelfStabilizing {
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp( "simss <options>", opt );
     }
+    private static void saveGraph (Graph g, OutputStreamWriter fwr) throws IOException
+    {
+    	fwr.append("DGS004\nnull 0 0\n");
+    	for (Node node: g.getNodeSet()) {
+    		fwr.append("an \"" + node.getId() + "\"\n");
+    	}
+    	for (Edge edge: g.getEdgeSet()) {
+    		Node n1;
+    		Node n2;
+    		n1 = edge.getNode0();
+    		n2 = edge.getNode1();
+    		fwr.append("ae \"" + edge.getId() + "\" \"" + n1.getId() + "\" \"" + n2.getId() + "\"\n");
+    	}
+    }
 
     public static void main(String[] args)
     {
@@ -46,16 +63,18 @@ public class SimulatorForSelfStabilizing {
         options.addOption("h", false, "print this message");
         //heuristic
         options.addOption("u", false, "if heuristic on");
-        options.addOption("s", true, "show the input file with specified delay (ms)");
+        options.addOption("y", true, "show the input file with specified delay (ms)");
         options.addOption("i", true, "the input file name");
         options.addOption("o", true, "the attachable output cvs file name");
         options.addOption("l", true, "the trace log file name");
+        options.addOption("s", true, "save the graph");
         options.addOption("a", true, "the algorithm name, ding or rand");
         // options specified to generator
         options.addOption("g", true, "the graph generator algorithm name: fan1l, fan2l, rand, doro, flower, watt, lobster");
         options.addOption("n", true, "the number of nodes");
-        options.addOption("d", true, "the node degree (max)");
-        options.addOption("f", false, "if the degree value is fix or not");
+        options.addOption("d", true, "(rand) the node degree (max)");
+        options.addOption("f", false, "(rand) if the degree value is fix or not");
+        options.addOption("p", true, "(watt) the probability of beta");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
@@ -71,8 +90,8 @@ public class SimulatorForSelfStabilizing {
         }
 
         int delay_time = 0;
-        if(cmd.hasOption("s")) {
-            delay_time = Integer.parseInt(cmd.getOptionValue("s"));
+        if(cmd.hasOption("y")) {
+            delay_time = Integer.parseInt(cmd.getOptionValue("y"));
         }
 
         String sFileName = null;
@@ -87,6 +106,19 @@ public class SimulatorForSelfStabilizing {
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error: unable to open the output file " + sFileName);
+                return;
+            }
+        }
+        FileWriter wrGraph= null;
+        if(cmd.hasOption("s")) {
+            sFileName = cmd.getOptionValue("s");
+        }
+        if ((null != sFileName) && (! "".equals(sFileName))) {
+            try {
+            	wrGraph = new FileWriter(sFileName, true); // true: append
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error: unable to open the saveGraph file " + sFileName);
                 return;
             }
         }
@@ -228,6 +260,9 @@ public class SimulatorForSelfStabilizing {
                 // beta being a probability it must be between 0 and 1.
                 int k;
                 double beta = 0.5;
+                if(cmd.hasOption("p")) {
+                	beta = Double.parseDouble(cmd.getOptionValue("p"));
+                }
                 k = (n / 20) * 2;
                 if (k < 2) {
                     k = 2;
@@ -332,6 +367,16 @@ public class SimulatorForSelfStabilizing {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        if (null != wrGraph) {
+        	try {
+				saveGraph (graph, wrGraph);
+				wrGraph.flush();
+				wrGraph.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
     }
 
