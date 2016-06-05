@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DN_DATA=data
+DN_RESULTS=results
 DN_EXEC=out
 EXEC_SIMSS=${DN_EXEC}/simss.jar
 
@@ -11,6 +11,8 @@ function generate_gnuplot_ding ()
     PARAM_PREFIX=$1
     shift
     PARAM_ALGORITHM=$1
+    shift
+    PARAM_FN_DATA=$1
     shift
 
     cat << EOF > ${PARAM_PREFIX}.gp
@@ -29,7 +31,7 @@ set xlabel "nodes"
 
 set logscale xy
 
-plot '${PARAM_PREFIX}.dat' using 1:2 with lp t 'steps'
+plot '${PARAM_FN_DATA}' using 1:2 with lp t 'steps'
 
 
 # set terminal png transparent nocrop enhanced size 450,320 font "arial,8" 
@@ -49,7 +51,7 @@ set xlabel "nodes"
 
 set logscale xy
 
-plot '${PARAM_PREFIX}.dat' using 1:3 with lp t 'size'
+plot '${PARAM_FN_DATA}' using 1:3 with lp t 'size'
 
 
 # set terminal png transparent nocrop enhanced size 450,320 font "arial,8" 
@@ -66,6 +68,8 @@ function generate_gnuplot_rand ()
     PARAM_PREFIX=$1
     shift
     PARAM_ALGORITHM=$1
+    shift
+    PARAM_FN_DATA=$1
     shift
 
     cat << EOF > ${PARAM_PREFIX}.gp
@@ -93,7 +97,7 @@ set xtics   ()
 set ytics border in scale 1,0.5 nomirror norotate  autojustify
 x = 0.0
 
-plot '${PARAM_PREFIX}.dat' using (1):2:(0):1
+plot '${PARAM_FN_DATA}' using (1):2:(0):1
 
 
 # set terminal png transparent nocrop enhanced size 450,320 font "arial,8" 
@@ -126,7 +130,7 @@ x = 0.0
 
 set logscale y
 
-plot '${PARAM_PREFIX}.dat' using (1):3:(0):1
+plot '${PARAM_FN_DATA}' using (1):3:(0):1
 
 
 # set terminal png transparent nocrop enhanced size 450,320 font "arial,8" 
@@ -137,6 +141,10 @@ replot
 EOF
 }
 
+mkdir -p ${DN_RESULTS}/graphs
+mkdir -p ${DN_RESULTS}/figures
+mkdir -p ${DN_RESULTS}/data
+#mkdir -p ${DN_RESULTS}/gnuplot
 
 ################################################################################
 if [ 0 = 1 ]; then
@@ -193,13 +201,13 @@ LIST_GENERATE_GRAPH=(
     "lobster,  lobster, 1002, 1002,,"
     "lobster,  lobster, 3164, 3164,,"
     "lobster,  lobster,10002,10002,,"
-    "watt,        watt,   12,   12,,"
-    "watt,        watt,   34,   34,,"
-    "watt,        watt,  102,  102,,"
-    "watt,        watt,  318,  318,,"
-    "watt,        watt, 1002, 1002,,"
-    "watt,        watt, 3164, 3164,,"
-    "watt,        watt,10002,10002,,"
+    "watt,        watt,   12,   12,,-p 0.2"
+    "watt,        watt,   34,   34,,-p 0.2"
+    "watt,        watt,  102,  102,,-p 0.2"
+    "watt,        watt,  318,  318,,-p 0.2"
+    "watt,        watt, 1002, 1002,,-p 0.2"
+    "watt,        watt, 3164, 3164,,-p 0.2"
+    "watt,        watt,10002,10002,,-p 0.2"
     "flower,    flower,   12,    1,,"
     "flower,    flower,   34,    6,,"
     "flower,    flower,  102,   24,,"
@@ -235,19 +243,19 @@ LIST_GENERATE_GRAPH=(
 # And we also need to verify all of the generated .dgs files to make sure all of nodes have the same degree.
 for gl in "${LIST_GENERATE_GRAPH[@]}" ; do
     echo "generating $gl ..."
-    set -- `echo $gl | tr , \ `
-    FN_OUTRAW="${DN_DATA}/selfstab-${1}-${3}-raw.dgs"
-    FN_OUT="${DN_DATA}/selfstab-${1}-${3}.dgs"
-    PARAMS="-g ${2} ${6} -n ${4}"
-    if [ ! "${5}" = "" ]; then
-        PARAMS="${PARAMS} -d ${5}"
-    fi
-    PARAMS="${PARAMS} -l ${FN_OUTRAW} -o results.csv"
+
+    ALG=`echo $gl | sed "s/, */,/g" | awk -F, '{ print $1; }' `
+    NSZ=`echo $gl | sed "s/, */,/g" | awk -F, '{ print $3; }' `
+    FN_OUTRAW="${DN_RESULTS}/graphs/selfstab-${ALG}-${NSZ}-raw.dgs"
+    FN_OUT="${DN_RESULTS}/graphs/selfstab-${ALG}-${NSZ}.dgs"
+    PARAMS=`echo $gl | sed "s/, */,/g" | awk -F, '{param = "-g " $2 " " $6 " -n " $4; if ($5 != "") { param=param " -d " $5; } print param; }' `
+    PARAMS="${PARAMS} -s ${FN_OUTRAW} -o results.csv"
     echo java -jar ${EXEC_SIMSS} ${PARAMS}
     java -jar ${EXEC_SIMSS} ${PARAMS}
     echo cat ${FN_OUTRAW} PIPE grep -v 'cn ' TO ${FN_OUT}
     cat ${FN_OUTRAW} | grep -v 'cn ' > ${FN_OUT}
 done
+rm -f ${DN_RESULTS}/graphs/*-raw.dgs
 exit 0
 fi
 
@@ -257,8 +265,10 @@ fi
 
 #LIST_NODES=( 12 34 102 318 1002 3164 )
 LIST_NODES=( 12 34 102 318 1002 3164 10002 )
+#LIST_NODES=( 10002 )
 
 LIST_GRAPH=( rand-f5 rand-fp3 rand-fp10 rand-m5 rand-mp3 rand-mp10 lobster watt flower doro fan1l fan2l )
+#LIST_GRAPH=( watt )
 
 LIST_GRAPH_DESC=(
     "rand-f5   -- Randomized graph with fixed degree 5"
@@ -283,26 +293,26 @@ if [ 1 = 1 ]; then
 i=0
 while (( $i < ${#LIST_GRAPH[*]} )) ; do
 
-    rm -f ${LIST_GRAPH[$i]}-ding.dat
-    rm -f ${LIST_GRAPH[$i]}-rand.dat
+    rm -f ${DN_RESULTS}/data/${LIST_GRAPH[$i]}-ding.dat
+    rm -f ${DN_RESULTS}/data/${LIST_GRAPH[$i]}-rand.dat
 
-    rm -f ${LIST_GRAPH[$i]}-rand-heuristic.dat
+    rm -f ${DN_RESULTS}/data/${LIST_GRAPH[$i]}-rand-heuristic.dat
 
     j=0
     while (( $j < ${#LIST_NODES[*]} )) ; do
-        FN_DATA="selfstab-${LIST_GRAPH[$i]}-${LIST_NODES[$j]}.dgs"
+        FN_GRAPH="${DN_RESULTS}/graphs/selfstab-${LIST_GRAPH[$i]}-${LIST_NODES[$j]}.dgs"
         echo "process ${LIST_GRAPH_DESC[$i]} with nodes ${LIST_NODES[$j]}"
 
 if [ 1 = 1 ]; then
         # Ding's linear algorithm
-        java -jar ${EXEC_SIMSS} -a ding -i ${DN_DATA}/${FN_DATA} -o ${LIST_GRAPH[$i]}-ding.dat
+        java -jar ${EXEC_SIMSS} -a ding -i ${FN_GRAPH} -o ${DN_RESULTS}/data/${LIST_GRAPH[$i]}-ding.dat
 
         # randomized algorithm
         C=0
         while (( $C < 12 )); do
-            java -jar ${EXEC_SIMSS} -a rand -i ${DN_DATA}/${FN_DATA} -o ${LIST_GRAPH[$i]}-rand.dat
+            java -jar ${EXEC_SIMSS} -a rand -i ${FN_GRAPH} -o ${DN_RESULTS}/data/${LIST_GRAPH[$i]}-rand.dat
             # randomized algorithm with heuristic mode on
-            java -jar ${EXEC_SIMSS} -a rand -i ${DN_DATA}/${FN_DATA} -o ${LIST_GRAPH[$i]}-rand-heuristic.dat -u
+            java -jar ${EXEC_SIMSS} -a rand -i ${FN_GRAPH} -o ${DN_RESULTS}/data/${LIST_GRAPH[$i]}-rand-heuristic.dat -u
             C=$(($C + 1))
         done
 
@@ -310,7 +320,7 @@ else
         # randomized algorithm with heuristic mode on
         C=0
         while (( $C < 12 )); do
-            java -jar ${EXEC_SIMSS} -a rand -i ${DN_DATA}/${FN_DATA} -o ${LIST_GRAPH[$i]}-rand-heuristic.dat -u
+            java -jar ${EXEC_SIMSS} -a rand -i ${FN_GRAPH} -o ${DN_RESULTS}/data/${LIST_GRAPH[$i]}-rand-heuristic.dat -u
             C=$(($C + 1))
         done
 fi
@@ -322,6 +332,8 @@ fi
 done
 
 fi
+
+exit 0
 
 
 ################################################################################
@@ -364,8 +376,9 @@ function randsummary ()
 
 #rm -f *.png *.eps *.gp
 
-FN_TEX=all.tex
-cat << EOF > "${FN_TEX}"
+DN_TEX=${DN_RESULTS}
+FN_TEX=reports-all.tex
+cat << EOF > "${DN_TEX}/${FN_TEX}"
 \documentclass[letter,10pt,onecolumn]{article}
 
 \newcommand{\doctitle}{Self-Stabilizing Algorithms Evaluation Reports}
@@ -477,13 +490,13 @@ EOF
 
 i=0
 while (( $i < ${#LIST_GRAPH[*]} )) ; do
-    cat << EOF >> "${FN_TEX}"
+    cat << EOF >> "${DN_TEX}/${FN_TEX}"
   \item ${LIST_GRAPH_DESC[$i]};
 EOF
     i=$((i+1))
 done
 
-cat << EOF >> "${FN_TEX}"
+cat << EOF >> "${DN_TEX}/${FN_TEX}"
 \end{enumerate}
 
 \clearpage
@@ -501,9 +514,9 @@ while (( $i < ${#LIST_GRAPH[*]} )) ; do
     FN_SUM_RAND_HEU="tmp-rand-f5-rand-heusum.dat"
 
     FN_TABLE="table-${LIST_GRAPH[$i]}.tex"
-    FN_RAND="${LIST_GRAPH[$i]}-rand.dat"
-    FN_RAND_HEU="${LIST_GRAPH[$i]}-rand-heuristic.dat"
-    FN_SUM_DING="${LIST_GRAPH[$i]}-ding.dat"
+    FN_RAND="${DN_RESULTS}/data/${LIST_GRAPH[$i]}-rand.dat"
+    FN_RAND_HEU="${DN_RESULTS}/data/${LIST_GRAPH[$i]}-rand-heuristic.dat"
+    FN_SUM_DING="${DN_RESULTS}/data/${LIST_GRAPH[$i]}-ding.dat"
     FN_SUM_RAND="tmp-${LIST_GRAPH[$i]}-rand-sum.dat"
     FN_SUM_RAND_HEU="tmp-${LIST_GRAPH[$i]}-rand-heusum.dat"
 
@@ -520,13 +533,13 @@ while (( $i < ${#LIST_GRAPH[*]} )) ; do
     #    D2=$(echo $b | awk '{print $3}')
     #    echo "$N & $S1 & $S2 & $D1 & $D2 \\\\"
     #done 3<${FN_SUM_DING} 4<${FN_SUM_RAND}
-    echo "%\begin{table}[h!t] \caption{The convergence steps and the size of dominating set by the \algoding~ and the \algorand~ algorithm on XXX graphs.} \label{tab:comparealgorithmxxx}" > "${FN_TABLE}"
-    echo "    \begin{center}" >> "${FN_TABLE}"
-    echo "        \begin{tabular}{|r||r|c|c||r|c|c|}" >> "${FN_TABLE}"
-    echo "            \hline \multirow{2}{*}{\textbf{Nodes}} & \multicolumn{3}{c||}{\textbf{\textit{Steps}}} & \multicolumn{3}{c|}{\textbf{\textit{Dominating Set Size}}} \\\\" >> "${FN_TABLE}"
-    echo "            \cline{2-7}" >> "${FN_TABLE}"
-    echo "             & \textbf{\algoding} & \textbf{\algorand} & \textbf{\algorand} heuristic & \textbf{\algoding} & \textbf{\algorand} & \textbf{\algorand} heuristic \\\\" >> "${FN_TABLE}"
-    echo "            \hline \hline" >> "${FN_TABLE}"
+    echo "%\begin{table}[h!t] \caption{The convergence steps and the size of dominating set by the \algoding~ and the \algorand~ algorithm on XXX graphs.} \label{tab:comparealgorithmxxx}" > "${DN_RESULTS}/figures/${FN_TABLE}"
+    echo "    \begin{center}" >> "${DN_RESULTS}/figures/${FN_TABLE}"
+    echo "        \begin{tabular}{|r||r|c|c||r|c|c|}" >> "${DN_RESULTS}/figures/${FN_TABLE}"
+    echo "            \hline \multirow{2}{*}{\textbf{Nodes}} & \multicolumn{3}{c||}{\textbf{\textit{Steps}}} & \multicolumn{3}{c|}{\textbf{\textit{Dominating Set Size}}} \\\\" >> "${DN_RESULTS}/figures/${FN_TABLE}"
+    echo "            \cline{2-7}" >> "${DN_RESULTS}/figures/${FN_TABLE}"
+    echo "             & \textbf{\algoding} & \textbf{\algorand} & \textbf{\algorand} heuristic & \textbf{\algoding} & \textbf{\algorand} & \textbf{\algorand} heuristic \\\\" >> "${DN_RESULTS}/figures/${FN_TABLE}"
+    echo "            \hline \hline" >> "${DN_RESULTS}/figures/${FN_TABLE}"
     while IFS= read -r -u3 a && IFS= read -r -u4 b && IFS= read -r -u5 c; do
         #printf '%s is good in %s\n' "$l1" "$l2"
         N=$(echo $a | awk '{print $1}')
@@ -537,60 +550,59 @@ while (( $i < ${#LIST_GRAPH[*]} )) ; do
         S3=$(echo $c | awk '{print $2}')
         D3=$(echo $c | awk '{print $3}')
         echo "$N & $S1 & $S2 & $S3 & $D1 & $D2 & $D3 \\\\ \hline"
-    done 3<${FN_SUM_DING} 4<${FN_SUM_RAND} 5<${FN_SUM_RAND_HEU} >> "${FN_TABLE}"
-    echo "        \end{tabular}" >> "${FN_TABLE}"
-    echo "    \end{center}" >> "${FN_TABLE}"
-    echo "%\end{table}" >> "${FN_TABLE}"
+    done 3<${FN_SUM_DING} 4<${FN_SUM_RAND} 5<${FN_SUM_RAND_HEU} >> "${DN_RESULTS}/figures/${FN_TABLE}"
+    echo "        \end{tabular}" >> "${DN_RESULTS}/figures/${FN_TABLE}"
+    echo "    \end{center}" >> "${DN_RESULTS}/figures/${FN_TABLE}"
+    echo "%\end{table}" >> "${DN_RESULTS}/figures/${FN_TABLE}"
 
-    generate_gnuplot_rand "${LIST_GRAPH[$i]}-rand-heuristic" "${LIST_GRAPH_DESC[$i]}"
-    gnuplot "${LIST_GRAPH[$i]}-rand-heuristic.gp"
+    generate_gnuplot_rand "${DN_RESULTS}/figures/${LIST_GRAPH[$i]}-rand-heuristic" "${LIST_GRAPH_DESC[$i]}" "${DN_RESULTS}/data/${LIST_GRAPH[$i]}-rand-heuristic.dat"
+    gnuplot "${DN_RESULTS}/figures/${LIST_GRAPH[$i]}-rand-heuristic.gp"
 
-    generate_gnuplot_ding "${LIST_GRAPH[$i]}-ding" "${LIST_GRAPH_DESC[$i]}"
-    generate_gnuplot_rand "${LIST_GRAPH[$i]}-rand" "${LIST_GRAPH_DESC[$i]}"
-    gnuplot "${LIST_GRAPH[$i]}-ding.gp"
-    gnuplot "${LIST_GRAPH[$i]}-rand.gp"
-
+    generate_gnuplot_ding "${DN_RESULTS}/figures/${LIST_GRAPH[$i]}-ding" "${LIST_GRAPH_DESC[$i]}" "${DN_RESULTS}/data/${LIST_GRAPH[$i]}-ding.dat"
+    generate_gnuplot_rand "${DN_RESULTS}/figures/${LIST_GRAPH[$i]}-rand" "${LIST_GRAPH_DESC[$i]}" "${DN_RESULTS}/data/${LIST_GRAPH[$i]}-rand.dat"
+    gnuplot "${DN_RESULTS}/figures/${LIST_GRAPH[$i]}-ding.gp"
+    gnuplot "${DN_RESULTS}/figures/${LIST_GRAPH[$i]}-rand.gp"
 
     # put the results to latex source file
-    cat << EOF >> "${FN_TEX}"
+    cat << EOF >> "${DN_TEX}/${FN_TEX}"
 \section{${LIST_GRAPH_DESC[$i]}}
 
 % the data
 \begin{table}[h!t] \caption{The convergence steps and the size of dominating set by the \algoding~ and the \algorand~ algorithm on a ${LIST_GRAPH_DESC[$i]}.} \label{tab:compalgorandf5}
-	\input{${FN_TABLE}}
+	\input{figures/${FN_TABLE}}
 \end{table}
 
 
 \begin{figure}[h!t] \centering
 	\vspace{-10pt}
 	\subfloat[{The run steps by \algoding~ algorithm.} \label{fig:fanstepsding}]{
-		\includegraphics[width=0.31\textwidth]{${LIST_GRAPH[$i]}-ding-steps.eps}
+		\includegraphics[width=0.31\textwidth]{figures/${LIST_GRAPH[$i]}-ding-steps.eps}
 	}
 	~%add desired spacing between images, e. g. ~, \quad, \qquad etc.
 	%(or a blank line to force the subfigure onto a new line)
 	%\hspace{-2mm}
 	\subfloat[{The run steps by \algorand~ algorithm.}\label{fig:fanstepsrand}]{
-		\includegraphics[width=0.31\textwidth]{${LIST_GRAPH[$i]}-rand-steps.eps}
+		\includegraphics[width=0.31\textwidth]{figures/${LIST_GRAPH[$i]}-rand-steps.eps}
 	}
 	~
 	\subfloat[{The run steps by \algorand~ heuristic algorithm.}\label{fig:fanstepsrand}]{
-		\includegraphics[width=0.31\textwidth]{${LIST_GRAPH[$i]}-rand-heuristic-steps.eps}
+		\includegraphics[width=0.31\textwidth]{figures/${LIST_GRAPH[$i]}-rand-heuristic-steps.eps}
 	}
 	\\\\%add desired spacing between images, e. g. ~, \quad, \qquad etc.
 	%(or a blank line to force the subfigure onto a new line)
 	%\vspace{-4pt}
 	\subfloat[{The dominating set size of the graph by \algoding~ algorithm.}\label{fig:fandsetding}]{
-		\includegraphics[width=0.31\textwidth]{${LIST_GRAPH[$i]}-ding-dset.eps}
+		\includegraphics[width=0.31\textwidth]{figures/${LIST_GRAPH[$i]}-ding-dset.eps}
 	}
 	~%add desired spacing between images, e. g. ~, \quad, \qquad etc.
 	%(or a blank line to force the subfigure onto a new line)
 	%\hspace{-2mm}
 	\subfloat[{The dominating set size of the graph by \algorand~ algorithm.}\label{fig:fandsetrand}]{
-		\includegraphics[width=0.31\textwidth]{${LIST_GRAPH[$i]}-rand-dset.eps}
+		\includegraphics[width=0.31\textwidth]{figures/${LIST_GRAPH[$i]}-rand-dset.eps}
 	}
 	~
 	\subfloat[{The dominating set size of the graph by \algorand~ heuristic algorithm.}\label{fig:fandsetrand}]{
-		\includegraphics[width=0.31\textwidth]{${LIST_GRAPH[$i]}-rand-heuristic-dset.eps}
+		\includegraphics[width=0.31\textwidth]{figures/${LIST_GRAPH[$i]}-rand-heuristic-dset.eps}
 	}
 %    \\\\%add desired spacing between images, e. g. ~, \quad, \qquad etc.
 %      %(or a blank line to force the subfigure onto a new line)
@@ -611,9 +623,14 @@ EOF
 done
 
 
-cat << EOF >> "${FN_TEX}"
+cat << EOF >> "${DN_TEX}/${FN_TEX}"
 
 \end{document}
 EOF
 
-xelatex all; xelatex all
+cd ${DN_TEX}
+xelatex "${FN_TEX}"
+xelatex "${FN_TEX}"
+cd -
+
+rm -f tmp-*.dat
