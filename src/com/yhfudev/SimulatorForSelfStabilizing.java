@@ -110,6 +110,7 @@ public class SimulatorForSelfStabilizing {
             }
         }
         FileWriter wrGraph= null;
+        sFileName = null;
         if(cmd.hasOption("s")) {
             sFileName = cmd.getOptionValue("s");
         }
