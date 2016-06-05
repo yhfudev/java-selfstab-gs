@@ -28,17 +28,19 @@ For example, in Eclipse, you can export the project from the menu "File" -- "Exp
     java -jar out/simss.jar -h
     usage: simss <options>
      -a <arg>   the algorithm name, ding or rand
-     -d <arg>   the node degree (max)
-     -f         if the degree value is fix or not
-     -g <arg>   the graph generator algorithm name: fan, rand, doro, flower,
-                watt, lobster
+     -d <arg>   (rand) the node degree (max)
+     -f         (rand) if the degree value is fix or not
+     -g <arg>   the graph generator algorithm name: fan1l, fan2l, rand, doro,
+                flower, watt, lobster
      -h         print this message
      -i <arg>   the input file name
      -l <arg>   the trace log file name
      -n <arg>   the number of nodes
      -o <arg>   the attachable output cvs file name
-     -s <arg>   show the input file with specified delay (ms)
+     -p <arg>   (watt) the probability of beta
+     -s <arg>   save the graph
      -u         if heuristic on
+     -y <arg>   show the input file with specified delay (ms)
 
 ### Generate the graph and store it to a file
 
@@ -60,7 +62,7 @@ is run on the graph and the results is verified to make sure everything is corre
 
 ### Run a predefined self-stabilizing algorithm on a graph input file and also show the GUI
 
-    java -jar simss.jar -a rand -i selfstab-rand-m5-10002.dgs -o rand-m5-rand.dat -s 10
+    java -jar simss.jar -a rand -i selfstab-rand-m5-10002.dgs -o rand-m5-rand.dat -y 10
 
 
 ### The benchmark script run.sh
