@@ -49,7 +49,7 @@ For example, in Eclipse, you can export the project from the menu "File" -- "Exp
 
 It will call the class ConnectionGenerator to generate a connected graph of size 10002 nodes,
 and the degree of each node is up to 5;
-The graph is stored in file selfstab-rand-m5-10002-raw.dgs, which is striped and save to selfstab-rand-m5-10002.dgs (the second line);
+The graph is stored in file selfstab-rand-m5-10002.dgs.
 A 
 self-stabilizing algorithm for minimal weakly connected dominating sets
 is run on the graph and the results is verified to make sure everything is correct.
