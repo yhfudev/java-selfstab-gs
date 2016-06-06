@@ -6,7 +6,7 @@ This simulator is implemented in java by using GraphStream library.
 Features
 --------
 
-  * Generates various graphs
+  * Generates various types of graph
   * Supports Ding-Wang-Srimani's self-stabilizing algorithm for minimal weakly connected dominating sets
   * Supports randomized self-stabilizing algorithm for minimal weakly connected dominating sets
   * GUI interface to show the graph and interact with it
@@ -27,6 +27,7 @@ For example, in Eclipse, you can export the project from the menu "File" -- "Exp
 
     java -jar out/simss.jar -h
     usage: simss <options>
+    usage: simss <options>
      -a <arg>   the algorithm name, ding or rand
      -d <arg>   (rand) the node degree (max)
      -f         (rand) if the degree value is fix or not
@@ -34,18 +35,17 @@ For example, in Eclipse, you can export the project from the menu "File" -- "Exp
                 flower, watt, lobster
      -h         print this message
      -i <arg>   the input file name
-     -l <arg>   the trace log file name
+     -l <arg>   the graph activities trace log file name
      -n <arg>   the number of nodes
-     -o <arg>   the attachable output cvs file name
+     -o <arg>   the results is save to a attachable output cvs file
      -p <arg>   (watt) the probability of beta
-     -s <arg>   save the graph
-     -u         if heuristic on
-     -y <arg>   show the input file with specified delay (ms)
+     -s <arg>   save the graph to a file
+     -u         (rand) heuristic on
+     -y <arg>   show the graph with specified delay (ms)
 
 ### Generate the graph and store it to a file
 
-    java -jar simss.jar -g rand -n 10002 -d 5 -l selfstab-rand-m5-10002-raw.dgs -o results.csv
-    cat selfstab-rand-m5-10002-raw.dgs | grep -v "cn " > selfstab-rand-m5-10002.dgs
+    java -jar simss.jar -g rand -n 10002 -d 5 -s selfstab-rand-m5-10002.dgs -o results.csv
 
 It will call the class ConnectionGenerator to generate a connected graph of size 10002 nodes,
 and the degree of each node is up to 5;

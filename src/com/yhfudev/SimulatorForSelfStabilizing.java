@@ -62,12 +62,12 @@ public class SimulatorForSelfStabilizing {
         Options options = new Options();
         options.addOption("h", false, "print this message");
         //heuristic
-        options.addOption("u", false, "if heuristic on");
-        options.addOption("y", true, "show the input file with specified delay (ms)");
+        options.addOption("u", false, "(rand) heuristic on");
+        options.addOption("y", true, "show the graph with specified delay (ms)");
         options.addOption("i", true, "the input file name");
-        options.addOption("o", true, "the attachable output cvs file name");
-        options.addOption("l", true, "the trace log file name");
-        options.addOption("s", true, "save the graph");
+        options.addOption("o", true, "the results is save to a attachable output cvs file");
+        options.addOption("l", true, "the graph activities trace log file name");
+        options.addOption("s", true, "save the graph to a file");
         options.addOption("a", true, "the algorithm name, ding or rand");
         // options specified to generator
         options.addOption("g", true, "the graph generator algorithm name: fan1l, fan2l, rand, doro, flower, watt, lobster");

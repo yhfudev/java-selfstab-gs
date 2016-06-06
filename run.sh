@@ -252,8 +252,8 @@ for gl in "${LIST_GENERATE_GRAPH[@]}" ; do
     PARAMS="${PARAMS} -s ${FN_OUTRAW} -o results.csv"
     echo java -jar ${EXEC_SIMSS} ${PARAMS}
     java -jar ${EXEC_SIMSS} ${PARAMS}
-    echo cat ${FN_OUTRAW} PIPE grep -v 'cn ' TO ${FN_OUT}
-    cat ${FN_OUTRAW} | grep -v 'cn ' > ${FN_OUT}
+    #echo cat ${FN_OUTRAW} PIPE grep -v 'cn ' TO ${FN_OUT}
+    #cat ${FN_OUTRAW} | grep -v 'cn ' > ${FN_OUT}
 done
 rm -f ${DN_RESULTS}/graphs/*-raw.dgs
 exit 0
